@@ -14,3 +14,4 @@
 .glide/
 
 # App Bot User Token
+config.json
