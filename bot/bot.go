@@ -50,6 +50,17 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	// Ask for guard
+	if m.Type == discordgo.MessageTypeGuildMemberJoin {
+		askForGuard(s, m)
+	}
+
+	// Place in a guard
+	placeInAGuard(s, m)
+}
+
+func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
+
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
@@ -99,7 +110,8 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Announce
 	if garde == "Étincelante" {
-		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde Étincelante, envoie un message à <@"+guild.OwnerID+"> sur Eldarya pour annoncer ta présence.")
+		roleID := getRoleByName(s, channel.GuildID, garde)
+		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde <@&"+roleID+">, envoie un message à <@"+guild.OwnerID+"> sur Eldarya pour annoncer ta présence.")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -111,6 +123,15 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
+	}
+}
+
+func askForGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
+
+	// Ask newcomer what's their guard
+	_, err := s.ChannelMessageSend(m.ChannelID, "Bonjour <@"+m.Author.ID+">! T'es dans quelle garde?")
+	if err != nil {
+		fmt.Println(err.Error())
 	}
 }
 
@@ -130,23 +151,4 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 	}
 
 	return ""
-}
-
-func joinHandler(s *discordgo.Session, j *discordgo.GuildMemberAdd) {
-
-	// Get the guild structure
-	guild, err := s.State.Guild(j.GuildID)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	// Get ChannelMessageSend parameters
-	channelID := guild.EmbedChannelID
-	message := "Bonjour " + j.User.Mention() + "! T'es dans quelle garde?"
-
-	// Ask newcomer what's their guard
-	_, err = s.ChannelMessageSend(channelID, message)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
 }
