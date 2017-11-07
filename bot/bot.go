@@ -129,7 +129,7 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 func askForGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Ask newcomer what's their guard
-	_, err := s.ChannelMessageSend(m.ChannelID, "Bonjour <@"+m.Author.ID+">! T'es dans quelle garde?")
+	_, err := s.ChannelMessageSend(m.ChannelID, "Bonjour <@"+m.Author.ID+">! De quelle garde fais-tu partie?")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
