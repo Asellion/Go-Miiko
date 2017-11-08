@@ -2,6 +2,7 @@ package bot
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"../config"
@@ -31,6 +32,7 @@ func Start() {
 
 	// Hey, listen!
 	goBot.AddHandler(messageHandler)
+	goBot.AddHandler(reactHandler)
 
 	// Crash on error
 	err = goBot.Open()
@@ -178,4 +180,61 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 	}
 
 	return ""
+}
+
+func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
+
+	// Get channel structure
+	channel, err := s.Channel(m.ChannelID)
+	if err != nil {
+		fmt.Println("Couldn't get the channel structure of a MessageReactionAdd!")
+		fmt.Println("m.ChannelID : " + m.ChannelID)
+		fmt.Println(err.Error())
+	}
+
+	// DM?
+	if channel.Type == discordgo.ChannelTypeDM {
+		return
+	}
+
+	// Get the message structure
+	message, err := s.ChannelMessage(m.ChannelID, m.MessageID)
+	if err != nil {
+		fmt.Println("Couldn't get the message structure of a MessageReactionAdd!")
+		fmt.Println("m.ChannelID : " + m.ChannelID)
+		fmt.Println("m.MessageID : " + m.MessageID)
+		fmt.Println(err.Error())
+	}
+
+	// Get the guild structure
+	guild, err := s.State.Guild(channel.GuildID)
+	if err != nil {
+		fmt.Println("Couldn't get the guild structure of a MessageReactionAdd!")
+		fmt.Println(err.Error())
+	}
+
+	// Get phi
+	phi := (1 + math.Sqrt(5)) / 2
+
+	// Get people online
+	var onlineCount int
+	for x := 0; x < len(guild.Presences); x++ {
+		if guild.Presences[x].Status == discordgo.StatusOnline {
+			onlineCount++
+		}
+	}
+
+	// Get online / phi
+	min := int(float64(len(guild.Presences)) / phi)
+
+	// Count the reactions
+	if len(message.Reactions) > min {
+
+		// Pin it!
+		err := s.ChannelMessagePin(m.ChannelID, m.MessageID)
+		if err != nil {
+			fmt.Println("Couldn't pin a popular message!")
+			fmt.Println(err.Error())
+		}
+	}
 }
