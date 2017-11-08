@@ -8,16 +8,18 @@ import (
 
 var (
 	// Public variables
-	Token     string
-	BotPrefix string
+	Token              string
+	BotPrefix          string
+	BotMasterChannelID string
 
 	// Private variables
 	config *configStruct
 )
 
 type configStruct struct {
-	Token     string `json:"Token"`
-	BotPrefix string `json:"BotPrefix"`
+	Token              string `json:"Token"`
+	BotPrefix          string `json:"BotPrefix"`
+	BotMasterChannelID string `json:"BotMasterChannelID"`
 }
 
 // ReadConfig : Reads the config of config.json.
@@ -39,8 +41,9 @@ func ReadConfig() error {
 		return err
 	}
 
-	// It works!
+	// Export
 	Token = config.Token
 	BotPrefix = config.BotPrefix
+	BotMasterChannelID = config.BotMasterChannelID
 	return nil
 }

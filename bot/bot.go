@@ -40,7 +40,7 @@ func Start() {
 	}
 
 	// It's alive!
-	fmt.Println("Bot is running!")
+	fmt.Println("Miiko is running!")
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -50,9 +50,30 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	// Get channel structure
+	channel, err := s.State.Channel(m.ChannelID)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	// DM?
+	if channel.Type == discordgo.ChannelTypeDM {
+		if config.BotMasterChannelID == "" {
+			fmt.Println(m.Author.Username + " : " + m.Content)
+		} else if m.ChannelID == config.BotMasterChannelID {
+		} else {
+			_, err := s.ChannelMessageSend(config.BotMasterChannelID, "<@"+m.Author.ID+"> : "+m.Content)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+		}
+		return
+	}
+
 	// Ask for guard
 	if m.Type == discordgo.MessageTypeGuildMemberJoin {
 		askForGuard(s, m)
+		return
 	}
 
 	// Place in a guard
@@ -98,7 +119,7 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.Contains(strings.ToLower(m.Content), "ombr") {
 		gardes = append(gardes, "Ombre")
 	}
-	if strings.Contains(strings.ToLower(m.Content), "joue pas") || strings.Contains(strings.ToLower(m.Content), "aucun") {
+	if strings.Contains(strings.ToLower(m.Content), "joue pas") || strings.Contains(strings.ToLower(m.Content), "aucun") || strings.Contains(strings.ToLower(m.Content), "ai pas") || strings.Contains(strings.ToLower(m.Content), " quoi") {
 		gardes = append(gardes, "PNJ")
 	}
 
@@ -109,17 +130,23 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// Announce
+	roleID := getRoleByName(s, channel.GuildID, garde)
 	if garde == "Étincelante" {
-		roleID := getRoleByName(s, channel.GuildID, garde)
-		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde <@&"+roleID+">, envoie un message à <@"+guild.OwnerID+"> sur Eldarya pour annoncer ta présence.")
+		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde <@&"+roleID+">, envoie un message à <@"+guild.OwnerID+"> sur Eldarya pour annoncer ta présence. En attendant, dans quelle garde est ton personnage sur Eldarya?")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
 	}
 	if garde == "Obsidienne" || garde == "Absynthe" || garde == "Ombre" {
-		roleID := getRoleByName(s, channel.GuildID, garde)
 		s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
-		_, err := s.ChannelMessageSend(m.ChannelID, "Bienvenue dans la Garde <@&"+roleID+">!")
+		_, err := s.ChannelMessageSend(m.ChannelID, "Bienvenue à <@"+m.Author.ID+"> dans la Garde <@&"+roleID+">!")
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+	if garde == "PNJ" {
+		s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
+		_, err := s.ChannelMessageSend(m.ChannelID, "D'accord, <@"+m.Author.ID+">. Je t'ai donné le rôle <@&"+roleID+"> en attendant que tu rejoignes une garde.")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
