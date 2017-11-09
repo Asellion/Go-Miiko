@@ -135,7 +135,7 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	if garde == "Obsidienne" || garde == "Absynthe" || garde == "Ombre" {
 		s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
-		_, err := s.ChannelMessageSend(m.ChannelID, "Bienvenue à <@"+m.Author.ID+"> dans la Garde <@&"+roleID+">!")
+		_, err := s.ChannelMessageSend(m.ChannelID, getGuardMessage(m.Author.ID, roleID))
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -164,5 +164,68 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 		}
 	}
 
-	return ""
+	// Create the missing role
+	role, err := s.GuildRoleCreate(guildID)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	// Get color
+	var color int
+	if name == "Étincelante" {
+		color = 15844367
+	} else if name == "Obsidienne" {
+		color = 15158332
+	} else if name == "Absynthe" {
+		color = 3066993
+	} else if name == "Ombre" {
+		color = 10181046
+	} else if name == "PNJ" {
+		color = 9807270
+	}
+
+	// Edit the missing role
+	_, err = s.GuildRoleEdit(guildID, role.ID, name, color, false, role.Permissions, false)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	return role.ID
+}
+
+func getGuardMessage(userID string, roleID string) string {
+
+	// Messages
+	var messageList []string
+	messageList = append(messageList, "Bienvenue à <@"+userID+"> dans la garde <@&"+roleID+">!")
+	messageList = append(messageList, "Bienvenue dans la garde <@&"+roleID+">, <@"+userID+">.")
+	messageList = append(messageList, "Bienvenue dans la garde <@&"+roleID+">, <@"+userID+">. J'espère que tu ne t'attends pas à un matelas.")
+	messageList = append(messageList, "Bienvenue au sein la garde <@&"+roleID+">, <@"+userID+">.")
+	messageList = append(messageList, "Bienvenue parmis les <@&"+roleID+">, <@"+userID+">.")
+	messageList = append(messageList, "<@"+userID+"> est maintenant un membre de la garde <@&"+roleID+">!")
+	messageList = append(messageList, "<@&"+roleID+"> a l'honneur d'accueillir <@"+userID+">!")
+	messageList = append(messageList, "<@&"+roleID+">! Faites de la place pour <@"+userID+">!")
+	messageList = append(messageList, "<@"+userID+"> fait maintenant partie de la garde <@&"+roleID+">.")
+	messageList = append(messageList, "<@"+userID+"> est maintenant une <@&"+roleID+">!")
+	messageList = append(messageList, "Souhaitez la bienvenue à notre nouvelle <@&"+roleID+">, <@"+userID+">!")
+	messageList = append(messageList, "Bien! <@"+userID+"> a maintenant une place dans les cachots d'<@&"+roleID+">.")
+	messageList = append(messageList, "<@"+userID+"> a rejoint la garde <@&"+roleID+">.")
+	messageList = append(messageList, "Je savais que <@"+userID+"> était une <@&"+roleID+">!")
+	messageList = append(messageList, "Ah, je savais que <@"+userID+"> était une <@&"+roleID+">.")
+	messageList = append(messageList, "Je savais bien que <@"+userID+"> était une <@&"+roleID+">!")
+	messageList = append(messageList, "Ah, je le savais! <@"+userID+"> est une <@&"+roleID+">!")
+	messageList = append(messageList, "J'en étais sûre! <@"+userID+"> est une <@&"+roleID+">!")
+	messageList = append(messageList, "<@"+userID+"> est dorénavant une <@&"+roleID+">.")
+	messageList = append(messageList, "Accueillez notre nouvelle <@&"+roleID+">, <@"+userID+">!")
+	messageList = append(messageList, "Je te souhaite un bon séjour parmis les <@&"+roleID+">, <@"+userID+">.")
+	messageList = append(messageList, "<@"+userID+"> peut maintenant rejoindre les <@&"+roleID+">.")
+	messageList = append(messageList, "Tu peux rejoindre les <@&"+roleID+">, <@"+userID+">.")
+	messageList = append(messageList, "Que les <@&"+roleID+"> soient avec <@"+userID+">.")
+
+	// Seed
+	source := rand.NewSource(time.Now().UnixNano())
+	seed := rand.New(source)
+
+	// Return
+	return messageList[seed.Intn(len(messageList))]
 }
