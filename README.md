@@ -6,7 +6,12 @@ You can invite her by clicking [here](https://discordapp.com/oauth2/authorize?&c
 ## Features
 * Welcome newcomers
 * Place newcomers in their guard
+* Create said guard if it doesn't exist
 * Warn Server Owner when there's a Light Guard member
 * ~~Likes popcorn~~
 * Pin popular messages
 * Send received direct messages to its master
+* Send an invite to people who leave the server
+* Tells people when she's typing
+* ~~Likes candies~~
+* Has *lots* of quotes. Like, **a lot**.

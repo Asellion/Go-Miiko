@@ -31,6 +31,7 @@ func Start() {
 	// Hey, listen!
 	goBot.AddHandler(messageHandler)
 	goBot.AddHandler(reactHandler)
+	goBot.AddHandler(leaveHandler)
 
 	// Crash on error
 	err = goBot.Open()
@@ -58,11 +59,22 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// DM?
 	if channel.Type == discordgo.ChannelTypeDM {
-		if config.BotMasterChannelID == "" { // No BotMaster
+		if config.BotMasterChannelID == "" {
+
+			// No BotMaster
 			fmt.Println(m.Author.Username + " : " + m.Content)
-		} else if m.ChannelID == config.BotMasterChannelID { // Talking to BotMaster
-			return
-		} else { // Foward the message to BotMaster!
+
+		} else if m.ChannelID == config.BotMasterChannelID {
+			// Talking to BotMaster
+		} else {
+
+			// Typing!
+			err = s.ChannelTyping(config.BotMasterChannelID)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			// Foward the message to BotMaster!
 			_, err := s.ChannelMessageSend(config.BotMasterChannelID, "<@"+m.Author.ID+"> : "+m.Content)
 			if err != nil {
 				fmt.Println(err.Error())
@@ -85,4 +97,10 @@ func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 	// Pin popular message
 	pin(s, m)
+}
+
+func leaveHandler(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
+
+	// Invite people who leave
+	waitComeBack(s, m)
 }

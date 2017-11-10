@@ -12,8 +12,14 @@ import (
 // Ask for the guard.
 func askForGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 
+	// Typing!
+	err := s.ChannelTyping(m.ChannelID)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
 	// Ask newcomer what's their guard
-	_, err := s.ChannelMessageSend(m.ChannelID, getWelcomeMessage(m.Author.ID))
+	_, err = s.ChannelMessageSend(m.ChannelID, getWelcomeMessage(m.Author.ID))
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -123,6 +129,12 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var garde string
 	if len(gardes) == 1 {
 		garde = gardes[0]
+	}
+
+	// Typing!
+	err = s.ChannelTyping(m.ChannelID)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
 
 	// Announce
