@@ -38,21 +38,30 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 
 	// Look for a valid channel to create an invite
 	var invite *discordgo.Invite
-	for x := 0; x < len(guild.Channels) && err != nil; x++ {
+	for x := 0; x < len(guild.Channels) && invite == nil; x++ {
+		if guild.Channels[x].Type == discordgo.ChannelTypeGuildText {
 
-		// Create invite
-		err = nil
-		invite, err = s.ChannelInviteCreate(guild.Channels[x].ID, invStruct)
+			// Create invite
+			err = nil
+			invite, err = s.ChannelInviteCreate(guild.Channels[x].ID, invStruct)
+		} else {
+			continue
+		}
 	}
 	if err != nil {
 		fmt.Println("Couldn't create an invite in " + guild.Name + ".")
 		fmt.Println(err.Error())
 		return
 	}
+	if invite == nil {
+		fmt.Println("Couldn't create an invite in " + guild.Name + ", but no error message were returned.")
+		return
+	}
 
 	// Send message
-	_, err = s.ChannelMessageSend(privateChannel.ID, "Oh, je suis triste de te voir partir! Si tu veux nous rejoindre à nouveau, j'ai créé une invitation pour toi : https://discord.gg/"+invite.Code+"")
+	_, err = s.ChannelMessageSend(privateChannel.ID, "Oh, je suis triste de te voir partir! Si tu veux nous rejoindre à nouveau, j'ai créé une invitation pour toi : https://discord.gg/"+invite.Code)
 	if err != nil {
+		fmt.Println("Couldn't send the message to " + m.User.Username + "!")
 		fmt.Println(err.Error())
 	}
 }
