@@ -58,10 +58,11 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// DM?
 	if channel.Type == discordgo.ChannelTypeDM {
-		if config.BotMasterChannelID == "" {
+		if config.BotMasterChannelID == "" { // No BotMaster
 			fmt.Println(m.Author.Username + " : " + m.Content)
-		} else if m.ChannelID == config.BotMasterChannelID {
-		} else {
+		} else if m.ChannelID == config.BotMasterChannelID { // Talking to BotMaster
+			return
+		} else { // Foward the message to BotMaster!
 			_, err := s.ChannelMessageSend(config.BotMasterChannelID, "<@"+m.Author.ID+"> : "+m.Content)
 			if err != nil {
 				fmt.Println(err.Error())

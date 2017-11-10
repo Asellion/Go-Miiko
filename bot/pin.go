@@ -61,12 +61,16 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		totalReactionsCount += message.Reactions[x].Count
 	}
 
+	// Pins needs at least 3 reactions!
+	var absoluteMinimum float64 = 3
+
 	// Get minimum for pin
-	minOnline := int(math.Max(3, math.Sqrt(float64(onlineCount))))
-	minTotal := int(math.Max(math.Max(3, math.Sqrt(float64(notOfflineCount))), float64(minOnline+1)))
+	minOnline := int(math.Max(absoluteMinimum, math.Ceil(math.Sqrt(float64(onlineCount)))))
+	// minTotal := int(math.Max(math.Max(absoluteMinimum, math.Ceil(math.Sqrt(float64(notOfflineCount)))), float64(minOnline+1)))
 
 	// Count the reactions
-	if singleReactionCount >= minOnline || totalReactionsCount >= minTotal {
+	if singleReactionCount >= minOnline {
+		// || totalReactionsCount >= minTotal
 
 		// Pin it!
 		err := s.ChannelMessagePin(m.ChannelID, m.MessageID)
