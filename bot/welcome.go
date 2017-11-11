@@ -220,7 +220,7 @@ func getGuardMessage(userID string, roleID string) string {
 	messageList = append(messageList, "<@"+userID+"> fait maintenant partie de la garde <@&"+roleID+">.")
 	messageList = append(messageList, "<@"+userID+"> est maintenant une <@&"+roleID+">!")
 	messageList = append(messageList, "Souhaitez la bienvenue à notre nouvelle <@&"+roleID+">, <@"+userID+">!")
-	messageList = append(messageList, "Bien! <@"+userID+"> a maintenant une place dans les cachots d'<@&"+roleID+">.")
+	messageList = append(messageList, "Bien! <@"+userID+"> a maintenant une place dans les cachots de la garde <@&"+roleID+">.")
 	messageList = append(messageList, "<@"+userID+"> a rejoint la garde <@&"+roleID+">.")
 	messageList = append(messageList, "Je savais que <@"+userID+"> était une <@&"+roleID+">!")
 	messageList = append(messageList, "Ah, je savais que <@"+userID+"> était une <@&"+roleID+">.")
