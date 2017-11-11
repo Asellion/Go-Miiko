@@ -91,6 +91,9 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Place in a guard
 	placeInAGuard(s, m)
+
+	// Popcorn?
+	popcorn(s, m)
 }
 
 func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
