@@ -39,7 +39,7 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 	// Look for a valid channel to create an invite
 	var invite *discordgo.Invite
 	for x := 0; x < len(guild.Channels) && invite == nil; x++ {
-		if guild.Channels[x].Type == discordgo.ChannelTypeGuildText {
+		if guild.Channels[x].Type == discordgo.ChannelTypeGuildText && guild.Channels[x].NSFW == false {
 
 			// Create invite
 			err = nil
