@@ -32,8 +32,6 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 
 	// Create an invite's structure
 	var invStruct discordgo.Invite
-	invStruct.MaxAge = 86400
-	invStruct.MaxUses = 1
 	invStruct.Temporary = true
 
 	// Look for a valid channel to create an invite
@@ -61,7 +59,7 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 	// Send message
 	_, err = s.ChannelMessageSend(privateChannel.ID, "Oh, je suis triste de te voir partir! Si tu veux nous rejoindre à nouveau, j'ai créé une invitation pour toi : https://discord.gg/"+invite.Code)
 	if err != nil {
-		fmt.Println("Couldn't send the message to " + m.User.Username + "!")
+		fmt.Println("Couldn't say bye to " + m.User.Username + "!")
 		fmt.Println(err.Error())
 	}
 }
