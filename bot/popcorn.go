@@ -79,6 +79,9 @@ func getPopcornMessage() string {
 	// WTF Miiko
 	popcornList = append(popcornList, "Moi, j'aime le popcorn!")
 
+	// Uhh...
+	popcornList = append(popcornList, "Le popcorn, c'est bon et tout, mais il ne faut pas oublier les friandises. J'adore les friandises!")
+
 	// Seed
 	seed := time.Now().UnixNano()
 	source := rand.NewSource(seed)
