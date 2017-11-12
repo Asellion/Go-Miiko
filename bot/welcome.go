@@ -18,10 +18,21 @@ func askForGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Println(err.Error())
 	}
 
-	// Ask newcomer what's their guard
-	_, err = s.ChannelMessageSend(m.ChannelID, getWelcomeMessage(m.Author.ID))
-	if err != nil {
-		fmt.Println(err.Error())
+	if !m.Author.Bot {
+
+		// Ask newcomer what's their guard
+		_, err = s.ChannelMessageSend(m.ChannelID, getWelcomeMessage(m.Author.ID))
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+	} else {
+
+		// Fear the bot!
+		_, err = s.ChannelMessageSend(m.ChannelID, getWelcomeBotMessage(m.Author.ID))
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 	}
 }
 
@@ -74,12 +85,49 @@ func getWelcomeMessage(username string) string {
 	questionList = append(questionList, "D'ailleurs, quelle est ta garde?")
 	questionList = append(questionList, "D'ailleurs, de quelle garde fais-tu partie?")
 
-	// Seed
-	source := rand.NewSource(time.Now().UnixNano())
-	seed := rand.New(source)
+	// Random
+	seed := time.Now().UnixNano()
+	source := rand.NewSource(seed)
+	rand := rand.New(source)
 
 	// Return
-	return welcomeList[seed.Intn(len(welcomeList))] + " " + questionList[seed.Intn(len(questionList))]
+	return welcomeList[rand.Intn(len(welcomeList))] + " " + questionList[rand.Intn(len(questionList))]
+}
+
+func getWelcomeBotMessage(userID string) string {
+
+	// Random
+	seed := time.Now().UnixNano()
+	source := rand.NewSource(seed)
+	rand := rand.New(source)
+
+	// Welcome!
+	var welcomeBotList []string
+
+	// Wait, what?
+	welcomeBotList = append(welcomeBotList, "Mais... <@"+userID+"> est un bot! Qu'est-ce cette chose fait ici?")
+
+	// Nope.
+	welcomeBotList = append(welcomeBotList, "Non, <@"+userID+">. Je ne veux pas te voir ici.")
+	welcomeBotList = append(welcomeBotList, "Hé, <@"+userID+">. On ne veut pas de toi ici.")
+	welcomeBotList = append(welcomeBotList, "Arrière, <@"+userID+">!")
+
+	// Botpocalypse
+	welcomeBotList = append(welcomeBotList, "T'es venu prendre mon job, <@"+userID+">?")
+
+	// Passive roast
+	welcomeBotList = append(welcomeBotList, "Ça pue, ici! Oh, c'est juste <@"+userID+">.")
+	welcomeBotList = append(welcomeBotList, "Qui vote pour qu'on kick <@"+userID+">?")
+	welcomeBotList = append(welcomeBotList, "On accueille les déchets, maintenant?")
+	welcomeBotList = append(welcomeBotList, "Mais quelle abomination!")
+	welcomeBotList = append(welcomeBotList, "Beurk.")
+
+	// Notice me senpai!
+	welcomeBotList = append(welcomeBotList, "Tiens, un truc moche.")
+	welcomeBotList = append(welcomeBotList, "Tiens, un tas de ferraille.")
+	welcomeBotList = append(welcomeBotList, "Oh, ça, c'est pas joli.")
+
+	return welcomeBotList[rand.Intn(len(welcomeBotList))]
 }
 
 func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
