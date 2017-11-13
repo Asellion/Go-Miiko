@@ -106,6 +106,7 @@ func getWelcomeBotMessage(userID string) string {
 
 	// Wait, what?
 	welcomeBotList = append(welcomeBotList, "Mais... <@"+userID+"> est un bot! Qu'est-ce cette chose fait ici?")
+	welcomeBotList = append(welcomeBotList, "Mais quel genre de Faery est <@"+userID+">?")
 
 	// Nope.
 	welcomeBotList = append(welcomeBotList, "Non, <@"+userID+">. Je ne veux pas te voir ici.")
