@@ -16,6 +16,14 @@ func main() {
 		return
 	}
 
+	// Reads the JSON database
+	err = config.ReadJSON()
+	if err != nil {
+		fmt.Println(err.Error())
+		config.WriteNewJSON()
+		// return
+	}
+
 	// License
 	fmt.Println("")
 	fmt.Println("Go-Miiko : Manages an Eldarya-themed Discord server.")
