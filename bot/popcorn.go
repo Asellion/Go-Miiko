@@ -23,7 +23,7 @@ func popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 		source := rand.NewSource(seed)
 		rand := rand.New(source)
 
-		if rand.Float64() < 1/math.Pow(phi, 2) {
+		if rand.Float64() <= 1/math.Pow(phi, 2) {
 
 			// Typing!
 			err := s.ChannelTyping(m.ChannelID)
