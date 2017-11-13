@@ -2,6 +2,7 @@ package bot
 
 import (
 	"fmt"
+	"strings"
 
 	"../config"
 	"github.com/bwmarrin/discordgo"
@@ -32,6 +33,7 @@ func Start() {
 	goBot.AddHandler(messageHandler)
 	goBot.AddHandler(reactHandler)
 	goBot.AddHandler(leaveHandler)
+	goBot.AddHandler(joinHandler)
 
 	// Crash on error
 	err = goBot.Open()
@@ -53,6 +55,12 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	// Get guild structure
+	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -85,12 +93,31 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Ask for guard
 	if m.Type == discordgo.MessageTypeGuildMemberJoin {
-		askForGuard(s, m)
+		config.UpdateWelcomeChannel(s, m)
 		return
 	}
 
 	// Place in a guard
 	placeInAGuard(s, m)
+
+	// Mentionned someone?
+	if len(m.Mentions) > 0 {
+		for x := 0; x < len(m.Mentions); x++ {
+
+			// Mentionned me?
+			if m.Mentions[x].ID == BotID {
+
+				// Command Set Welcome Channel
+				if (strings.Contains(m.Content, "set") && strings.Contains(m.Content, "welcome") && strings.Contains(m.Content, "channel") && m.Author.ID == guild.OwnerID) && !strings.Contains(m.Content, "\\") {
+					config.UpdateWelcomeChannel(s, m)
+					_, err := s.ChannelMessageSend(m.ChannelID, "D'accord! Ce channel est maintenant le channel de bienvenue.")
+					if err != nil {
+						fmt.Println(err.Error())
+					}
+				}
+			}
+		}
+	}
 
 	// Popcorn?
 	popcorn(s, m)
@@ -106,4 +133,14 @@ func leaveHandler(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 
 	// Invite people who leave
 	waitComeBack(s, m)
+}
+
+func joinHandler(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+
+	// Myself?
+	if m.User.ID != BotID {
+
+		// Ask for guard
+		askForGuard(s, m)
+	}
 }

@@ -6,22 +6,29 @@ import (
 	"strings"
 	"time"
 
+	"../config"
 	"github.com/bwmarrin/discordgo"
 )
 
 // Ask for the guard.
-func askForGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
+func askForGuard(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+
+	welcomeChannelID := config.GetWelcomeChannelByGuildID(m.GuildID)
+	if welcomeChannelID == "" {
+		fmt.Println("There are no defined welcome channel for this guild.")
+		return
+	}
 
 	// Typing!
-	err := s.ChannelTyping(m.ChannelID)
+	err := s.ChannelTyping(welcomeChannelID)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	if !m.Author.Bot {
+	if !m.User.Bot {
 
 		// Ask newcomer what's their guard
-		_, err = s.ChannelMessageSend(m.ChannelID, getWelcomeMessage(m.Author.ID))
+		_, err = s.ChannelMessageSend(welcomeChannelID, getWelcomeMessage(m.User.ID))
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -29,7 +36,7 @@ func askForGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else {
 
 		// Fear the bot!
-		_, err = s.ChannelMessageSend(m.ChannelID, getWelcomeBotMessage(m.Author.ID))
+		_, err = s.ChannelMessageSend(welcomeChannelID, getWelcomeBotMessage(m.User.ID))
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -54,7 +61,7 @@ func getWelcomeMessage(username string) string {
 	welcomeList = append(welcomeList, "<@"+username+">, tu es là! Je te souhaite la bienvenue sur notre serveur.")
 	welcomeList = append(welcomeList, "<@"+username+">, tu es là! Nous t'attendions.")
 	welcomeList = append(welcomeList, "Ah, voilà <@"+username+">. Bienvenue!")
-	welcomeList = append(welcomeList, "Ah, voilà <@"+username+">. Je te souhaite la bienvenue.")
+	welcomeList = append(welcomeList, "Ah, voilà <@"+username+">. Je te souhaite la bienvenue!")
 	welcomeList = append(welcomeList, "Ah, voilà <@"+username+">. Je te souhaite la bienvenue sur notre serveur.")
 	welcomeList = append(welcomeList, "Ah, voilà <@"+username+">. Nous t'attendions.")
 	welcomeList = append(welcomeList, "<@"+username+">, je te souhaite la bienvenue.")
@@ -84,6 +91,9 @@ func getWelcomeMessage(username string) string {
 	questionList = append(questionList, "D'ailleurs, dans quelle garde es-tu?")
 	questionList = append(questionList, "D'ailleurs, quelle est ta garde?")
 	questionList = append(questionList, "D'ailleurs, de quelle garde fais-tu partie?")
+	questionList = append(questionList, "Alors, dans quelle garde es-tu?")
+	questionList = append(questionList, "Alors, quelle est ta garde?")
+	questionList = append(questionList, "Alors, de quelle garde fais-tu partie?")
 
 	// Random
 	seed := time.Now().UnixNano()
@@ -178,6 +188,8 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var garde string
 	if len(gardes) == 1 {
 		garde = gardes[0]
+	} else {
+		return
 	}
 
 	// Typing!

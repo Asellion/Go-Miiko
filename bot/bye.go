@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"time"
 
+	"../config"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -18,34 +19,27 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 		return
 	}
 
-	// Create an invite's structure
+	// Get channel
+	channel := config.GetWelcomeChannelByGuildID(guild.ID)
+	if channel == "" {
+		return
+	}
+
+	// Create an invite structure
 	var invStruct discordgo.Invite
 	invStruct.Temporary = true
 
-	// Look for a valid channel to create an invite
+	// Invite to WelcomeChannel
 	var invite *discordgo.Invite
-	for x := 0; x < len(guild.Channels) && invite == nil; x++ {
-		if guild.Channels[x].Type == discordgo.ChannelTypeGuildText && guild.Channels[x].NSFW == false {
-
-			// Create invite
-			err = nil
-			invite, err = s.ChannelInviteCreate(guild.Channels[x].ID, invStruct)
-		} else {
-			continue
-		}
-	}
+	invite, err = s.ChannelInviteCreate(channel, invStruct)
 	if err != nil {
 		fmt.Println("Couldn't create an invite in " + guild.Name + ".")
 		fmt.Println(err.Error())
 		return
 	}
-	if invite == nil {
-		fmt.Println("Couldn't create an invite in " + guild.Name + ", but no error message were returned.")
-		return
-	}
 
 	// Bot?
-	if !m.Member.User.Bot {
+	if !m.User.Bot {
 
 		// Open channel
 		privateChannel, err := s.UserChannelCreate(m.User.ID)
@@ -71,13 +65,13 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 	} else {
 
 		// Typing!
-		err = s.ChannelTyping(invite.Channel.ID)
+		err = s.ChannelTyping(channel)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
 
 		// Send message
-		_, err = s.ChannelMessageSend(invite.Channel.ID, getByeBotMessage(m.User.ID))
+		_, err = s.ChannelMessageSend(channel, getByeBotMessage(m.User.ID))
 		if err != nil {
 			fmt.Println("Couldn't say bye to " + m.User.Username + "!")
 			fmt.Println(err.Error())

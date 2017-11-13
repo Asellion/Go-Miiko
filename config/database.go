@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 var (
@@ -71,4 +73,64 @@ func WriteNewJSON() error {
 	var newDatabase database
 	Database = newDatabase
 	return WriteJSON()
+}
+
+// UpdateWelcomeChannel gets an automatic welcome message and updates the welcome channel with this.
+func UpdateWelcomeChannel(s *discordgo.Session, m *discordgo.MessageCreate) {
+
+	// Get channel structure
+	channel, err := s.State.Channel(m.ChannelID)
+	if err != nil {
+		fmt.Println("Couldn't get the channel structure!")
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Is there already an entry for this Guild?
+	index := len(Database.WelcomeChannels)
+	for x := 0; x < len(Database.WelcomeChannels); x++ {
+		if Database.WelcomeChannels[x].GuildID == channel.GuildID {
+			index = x
+			break
+		}
+	}
+
+	// Nope
+	if index == len(Database.WelcomeChannels) {
+
+		// Create entry
+		var newWelcomeChannel welcomeChannel
+		newWelcomeChannel.GuildID = channel.GuildID
+		newWelcomeChannel.ChannelID = channel.ID
+		Database.WelcomeChannels = append(Database.WelcomeChannels, newWelcomeChannel)
+
+	} else {
+
+		// Update entry
+		Database.WelcomeChannels[index].ChannelID = channel.ID
+	}
+
+	// Save
+	WriteJSON()
+}
+
+// GetWelcomeChannelByGuildID outputs a guild's welcome channel ID. Watch out for "" value!
+func GetWelcomeChannelByGuildID(guildID string) string {
+
+	// Is there already an entry for this Guild?
+	index := len(Database.WelcomeChannels)
+	for x := 0; x < len(Database.WelcomeChannels); x++ {
+		if Database.WelcomeChannels[x].GuildID == guildID {
+			index = x
+			break
+		}
+	}
+
+	// Nope
+	if index == len(Database.WelcomeChannels) {
+		return ""
+	}
+
+	// Yes!
+	return Database.WelcomeChannels[index].ChannelID
 }
