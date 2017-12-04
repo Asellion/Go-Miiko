@@ -23,7 +23,7 @@ func popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 		source := rand.NewSource(seed)
 		rand := rand.New(source)
 
-		if rand.Float64() <= 1/math.Pow(phi, 2) {
+		if rand.Float64() <= 1/math.Pow(phi, 1) {
 
 			// Typing!
 			err := s.ChannelTyping(m.ChannelID)
@@ -62,22 +62,26 @@ func getPopcornMessage() string {
 	popcornList = append(popcornList, "Popcorn!")
 	popcornList = append(popcornList, "Popcorn?!")
 	popcornList = append(popcornList, "Popcorn!?")
+	popcornList = append(popcornList, "**Popcorn?!**")
+	popcornList = append(popcornList, "**Popcorn!?**")
+	popcornList = append(popcornList, "Ah, popcorn!")
+	popcornList = append(popcornList, "Hmm, du popcorn...")
+	popcornList = append(popcornList, "Hmm, du *popcorn*...")
 
-	// Surprize
+	// Question
+	popcornList = append(popcornList, "On parle de popcorn?")
 	popcornList = append(popcornList, "Quelqu'un a dit popcorn?")
 	popcornList = append(popcornList, "Quelqu'un a dit popcorn?!")
 	popcornList = append(popcornList, "Quelqu'un a dit **popcorn**?!")
+	popcornList = append(popcornList, "Quelqu'un a parlé de popcorn?")
+	popcornList = append(popcornList, "Quelqu'un a parlé de popcorn?!")
 	popcornList = append(popcornList, "Ai-je bien entendu popcorn?")
 	popcornList = append(popcornList, "Ai-je bien entendu popcorn?!")
 	popcornList = append(popcornList, "Ai-je bien entendu **popcorn**?!")
 
-	// Question
-	popcornList = append(popcornList, "On parle de popcorn?")
-	popcornList = append(popcornList, "Quelqu'un a parlé de popcorn?")
-	popcornList = append(popcornList, "Quelqu'un a parlé de popcorn?!")
-
 	// WTF Miiko
 	popcornList = append(popcornList, "Moi, j'aime le popcorn!")
+	popcornList = append(popcornList, "Le popcorn, c'est génial!")
 
 	// Uhh...
 	popcornList = append(popcornList, "Le popcorn, c'est bon et tout, mais il ne faut pas oublier les friandises. J'adore les friandises!")
