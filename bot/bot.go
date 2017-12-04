@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"../config"
+	"github.com/NatoBoram/Go-Miiko/config"
 	"github.com/bwmarrin/discordgo"
 )
 

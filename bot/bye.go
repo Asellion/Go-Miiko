@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"../config"
+	"github.com/NatoBoram/Go-Miiko/config"
 	"github.com/bwmarrin/discordgo"
 )
 
