@@ -138,6 +138,9 @@ func getWelcomeBotMessage(userID string) string {
 	welcomeBotList = append(welcomeBotList, "Tiens, un tas de ferraille.")
 	welcomeBotList = append(welcomeBotList, "Oh, ça, c'est pas joli.")
 
+	// Community
+	welcomeBotList = append(welcomeBotList, "100 PO à celui qui débranche <@"+userID+">!")
+
 	return welcomeBotList[rand.Intn(len(welcomeBotList))]
 }
 
