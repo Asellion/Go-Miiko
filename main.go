@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"./bot"
-	"./config"
+	"github.com/NatoBoram/Go-Miiko/bot"
+	"github.com/NatoBoram/Go-Miiko/config"
 )
 
 func main() {
