@@ -49,7 +49,7 @@ func Start() {
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Myself?
-	if m.Author.ID == BotID {
+	if m.Author.ID == BotID || !m.Author.Bot {
 		return
 	}
 
