@@ -15,6 +15,7 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		fmt.Println("Couldn't get the channel structure of a MessageReactionAdd!")
 		fmt.Println("m.ChannelID : " + m.ChannelID)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// DM?
@@ -29,13 +30,16 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		fmt.Println("m.ChannelID : " + m.ChannelID)
 		fmt.Println("m.MessageID : " + m.MessageID)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// Get the guild structure
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
 		fmt.Println("Couldn't get the guild structure of a MessageReactionAdd!")
+		fmt.Println("channel.GuildID : " + channel.GuildID)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// Get phi
@@ -66,7 +70,7 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 	// Get minimum for pin
 	minOnline := int(math.Max(absoluteMinimum, math.Ceil(math.Sqrt(float64(onlineCount)))))
-	// minTotal := int(math.Max(math.Max(absoluteMinimum, math.Ceil(math.Sqrt(float64(notOfflineCount)))), float64(minOnline+1)))
+	// minTotal := int(math.Max(minOnline + 1, math.Ceil(math.Sqrt(float64(notOfflineCount)))))
 
 	// Count the reactions
 	if singleReactionCount >= minOnline {
@@ -76,7 +80,9 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 		err := s.ChannelMessagePin(m.ChannelID, m.MessageID)
 		if err != nil {
 			fmt.Println("Couldn't pin a popular message!")
+			fmt.Println("Message : " + message.Content)
 			fmt.Println(err.Error())
+			return
 		}
 	}
 }
