@@ -3,7 +3,7 @@ package bot
 import (
 	"fmt"
 
-	"../config"
+	"github.com/NatoBoram/Go-Miiko/config"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -24,7 +24,9 @@ func Start() {
 	// Get Bot ID
 	u, err := goBot.User("@me")
 	if err != nil {
+		fmt.Println("Couldn't get the BotID.")
 		fmt.Println(err.Error())
+		return
 	}
 	BotID = u.ID
 
