@@ -43,7 +43,7 @@ func Start() {
 	}
 
 	// It's alive!
-	fmt.Println("Miiko is running!")
+	fmt.Println("Hi, Master. I am Miiko, and everything's all right!")
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -56,13 +56,20 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
+		fmt.Println("Couldn't get the channel structure of a said message.")
+		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// Get guild structure
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
+		fmt.Println("Couldn't get the guild structure of a said message.")
+		fmt.Println("Message : " + m.Content)
+		fmt.Println("Channel : " + channel.Name)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// DM?
@@ -73,18 +80,24 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Println(m.Author.Username + " : " + m.Content)
 
 		} else if m.ChannelID == config.BotMasterChannelID {
-			// Talking to BotMaster
+
+			// Talking to Master
+
 		} else {
 
 			// Typing!
 			err = s.ChannelTyping(config.BotMasterChannelID)
 			if err != nil {
+				fmt.Println("Couldn't tell Master that I'm typing.")
 				fmt.Println(err.Error())
 			}
 
 			// Foward the message to BotMaster!
 			_, err := s.ChannelMessageSend(config.BotMasterChannelID, "<@"+m.Author.ID+"> : "+m.Content)
 			if err != nil {
+				fmt.Println("Couldn't foward a message to Master.")
+				fmt.Println("Author : " + m.Author.Username)
+				fmt.Println("Message : " + m.Content)
 				fmt.Println(err.Error())
 			}
 		}
@@ -110,8 +123,9 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				// Command Set Welcome Channel
 				if (strings.Contains(m.Content, "set") && strings.Contains(m.Content, "welcome") && strings.Contains(m.Content, "channel") && m.Author.ID == guild.OwnerID) && !strings.Contains(m.Content, "\\") {
 					config.UpdateWelcomeChannel(s, m)
-					_, err := s.ChannelMessageSend(m.ChannelID, "D'accord! Ce channel est maintenant le channel de bienvenue.")
+					_, err := s.ChannelMessageSend(m.ChannelID, "D'accord! Ce salon est maintenant le salon de bienvenue.")
 					if err != nil {
+						fmt.Println("Couldn't foward a message to Master.")
 						fmt.Println(err.Error())
 					}
 				}
