@@ -7,12 +7,16 @@ import (
 )
 
 var (
-	// Public variables
-	Token              string
-	BotPrefix          string
+
+	// Token : Token.
+	Token string
+
+	// BotPrefix : Command used to call the bot. Unused.
+	BotPrefix string
+
+	// BotMasterChannelID : ChannelID of the BotMaster. I have to change it for MasterID... Eventually.
 	BotMasterChannelID string
 
-	// Private variables
 	config *configStruct
 )
 
