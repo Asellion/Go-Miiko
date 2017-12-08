@@ -59,6 +59,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
 		fmt.Println("Couldn't get the channel structure of a said message.")
+		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
 		return
@@ -68,8 +69,9 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
 		fmt.Println("Couldn't get the guild structure of a said message.")
-		fmt.Println("Message : " + m.Content)
 		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + m.Author.Username)
+		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
 		return
 	}
@@ -125,9 +127,9 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				// Command Set Welcome Channel
 				if (strings.Contains(m.Content, "set") && strings.Contains(m.Content, "welcome") && strings.Contains(m.Content, "channel") && m.Author.ID == guild.OwnerID) && !strings.Contains(m.Content, "\\") {
 					config.UpdateWelcomeChannel(s, m)
-					_, err := s.ChannelMessageSend(m.ChannelID, "D'accord! Ce salon est maintenant le salon de bienvenue.")
+					_, err := s.ChannelMessageSend(channel.ID, "D'accord! Ce salon est maintenant le salon de bienvenue.")
 					if err != nil {
-						fmt.Println("Couldn't foward a message to Master.")
+						fmt.Println("Couldn't send a message in " + channel.Name + ".")
 						fmt.Println(err.Error())
 					}
 				}
