@@ -15,16 +15,12 @@ var goBot *discordgo.Session
 // Start : Starts the bot.
 func Start() {
 
-	fmt.Println("Begin START")
-
 	// Go online!
 	goBot, err := discordgo.New("Bot " + config.Token)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-
-	fmt.Println("Token : " + config.Token)
 
 	// Get Bot ID
 	u, err := goBot.User("@me")
@@ -34,8 +30,6 @@ func Start() {
 		return
 	}
 	BotID = u.ID
-
-	fmt.Println("Bot ID : " + BotID)
 
 	// Hey, listen!
 	goBot.AddHandler(messageHandler)
@@ -55,10 +49,6 @@ func Start() {
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-
-	// Debug
-	fmt.Println("Author : " + m.Author.Username)
-	fmt.Println("Author : " + m.Content)
 
 	// Myself?
 	if m.Author.ID == BotID || m.Author.Bot {
