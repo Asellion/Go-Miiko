@@ -206,28 +206,62 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Typing!
 	err = s.ChannelTyping(m.ChannelID)
 	if err != nil {
+		fmt.Println("Couldn't tell that I'm typing.")
+		fmt.Println("Channel : " + channel.Name)
 		fmt.Println(err.Error())
 	}
 
 	// Announce
 	roleID := getRoleByName(s, channel.GuildID, garde)
 	if garde == "Étincelante" {
+
+		// Announce
 		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde <@&"+roleID+">, envoie un message à <@"+guild.OwnerID+"> sur Eldarya pour annoncer ta présence. En attendant, dans quelle garde est ton personnage sur Eldarya?")
 		if err != nil {
+			fmt.Println("Couldn't send message for special role.")
+			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 		}
 	}
+
 	if garde == "Obsidienne" || garde == "Absynthe" || garde == "Ombre" {
-		s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
-		_, err := s.ChannelMessageSend(m.ChannelID, getGuardMessage(m.Author.ID, roleID))
+
+		// Add role
+		err := s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
 		if err != nil {
+			fmt.Println("Couldn't add a role.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Member : " + m.Author.Username)
+			fmt.Println(err.Error())
+			return
+		}
+
+		// Announce
+		_, err = s.ChannelMessageSend(m.ChannelID, getGuardMessage(m.Author.ID, roleID))
+		if err != nil {
+			fmt.Println("Couldn't announce new role.")
+			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 		}
 	}
+
 	if garde == "PNJ" {
-		s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
-		_, err := s.ChannelMessageSend(m.ChannelID, "D'accord, <@"+m.Author.ID+">. Je t'ai donné le rôle <@&"+roleID+"> en attendant que tu rejoignes une garde.")
+
+		// Add role
+		err := s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
 		if err != nil {
+			fmt.Println("Couldn't add a role.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Member : " + m.Author.Username)
+			fmt.Println(err.Error())
+			return
+		}
+
+		// Announce
+		_, err = s.ChannelMessageSend(m.ChannelID, "D'accord, <@"+m.Author.ID+">. Je t'ai donné le rôle <@&"+roleID+"> en attendant que tu rejoignes une garde.")
+		if err != nil {
+			fmt.Println("Couldn't announce new role.")
+			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 		}
 	}
