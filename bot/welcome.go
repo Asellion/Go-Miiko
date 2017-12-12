@@ -149,18 +149,26 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
+		fmt.Println("Couldn't get a channel structure.")
+		fmt.Println("Author : " + m.Author.Username)
+		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
 	}
 
 	// Get guild structure
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
+		fmt.Println("Couldn't get a guild structure.")
+		fmt.Println("Channel : " + channel.Name)
 		fmt.Println(err.Error())
 	}
 
 	// Get guild member
 	member, err := s.GuildMember(channel.GuildID, m.Author.ID)
 	if err != nil {
+		fmt.Println("Couldn't get a member structure.")
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println(err.Error())
 	}
 
