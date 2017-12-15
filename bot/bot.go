@@ -51,7 +51,7 @@ func Start() {
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Myself?
-	if m.Author.ID == BotID || m.Author.Bot {
+	if m.Author.ID == BotID {
 		return
 	}
 
@@ -78,6 +78,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// DM?
 	if channel.Type == discordgo.ChannelTypeDM {
+
+		// Popcorn?
+		popcorn(s, m)
+
 		if config.BotMasterChannelID == "" {
 
 			// No BotMaster
@@ -108,9 +112,17 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	// Ask for guard
+	// Update welcome channel
 	if m.Type == discordgo.MessageTypeGuildMemberJoin {
 		config.UpdateWelcomeChannel(s, m)
+		return
+	}
+
+	// Popcorn?
+	popcorn(s, m)
+
+	// Bot?
+	if m.Author.Bot {
 		return
 	}
 
@@ -136,9 +148,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 	}
-
-	// Popcorn?
-	popcorn(s, m)
 }
 
 func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
