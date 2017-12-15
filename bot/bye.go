@@ -130,6 +130,25 @@ func getPublicByeMessage(userID string) string {
 	byeList = append(byeList, "Il pleut lorsque je regarde vers <@"+userID+">.")
 	byeList = append(byeList, "Mon coeur se serre à l'annonce du départ de <@"+userID+">.")
 	byeList = append(byeList, "<@"+userID+"> a donné sa démission.")
+	byeList = append(byeList, "Que la force soit avec <@"+userID+">.")
+
+	// Death
+	byeList = append(byeList, "Repose en paix, <@"+userID+">.")
+	byeList = append(byeList, "Pourquoi, <@"+userID+">, pourquoi?")
+	byeList = append(byeList, "<@"+userID+"> s'est fait dévorer par un Hydracarys.")
+	byeList = append(byeList, "<@"+userID+"> a marché dans une toile de Chead.")
+	byeList = append(byeList, "Un Black Gallytrot a démembré <@"+userID+">.")
+	byeList = append(byeList, "La foudre a frappé <@"+userID+">.")
+	byeList = append(byeList, "Je suis attristée d'apprendre la perte soudaine de <@"+userID+">.")
+	byeList = append(byeList, "Mon coeur est avec <@"+userID+"> en ce temps de tristesse.")
+	byeList = append(byeList, "Mes sincères condoléances pour la perte de <@"+userID+">.")
+	byeList = append(byeList, "Les mots ne peuvent exprimer combien je suis attristée d'apprendre la perte de <@"+userID+">.")
+	byeList = append(byeList, "Mes pensées et mes prières sont avec <@"+userID+"> pendant cette période tragique.")
+	byeList = append(byeList, "Mes plus sincères condoléances pour la perte de <@"+userID+">.")
+	byeList = append(byeList, "Que Dieu bénisse <@"+userID+"> en ce moment de tristesse.")
+	byeList = append(byeList, "Je suis vraiment attristée d'apprendre la mort de <@"+userID+">.")
+	byeList = append(byeList, "Puisse <@"+userID+"> reposer en paix.")
+	byeList = append(byeList, "C'est avec une grande tristesse que j'ai appris le décès de <@"+userID+">.")
 
 	// Community
 	byeList = append(byeList, "Aurevoir, <@"+userID+">. Reviens-nous vite!")
