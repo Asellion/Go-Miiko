@@ -1,4 +1,4 @@
 #!/bin/sh
+go get -fix -u -v github.com/NatoBoram/Go-Miiko
 clear
-go get -fix -u github.com/NatoBoram/Go-Miiko
 go run main.go
