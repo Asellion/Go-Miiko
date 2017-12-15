@@ -122,7 +122,7 @@ func getPublicByeMessage(userID string) string {
 	byeList = append(byeList, "L'Oracle a emporté <@"+userID+"> avec elle.")
 	byeList = append(byeList, "<@"+userID+"> a quitté la garde.")
 	byeList = append(byeList, "Attends, <@"+userID+">, reviens!")
-	byeList = append(byeList, "<@"+userID+"> s'est envolé!")
+	byeList = append(byeList, "<@"+userID+"> a pris son envol!")
 	byeList = append(byeList, "<@"+userID+"> vole de ses propres ailes.")
 	byeList = append(byeList, "<@"+userID+"> part à l'aventure!")
 	byeList = append(byeList, "L'aventure de <@"+userID+"> se termine ici.")
