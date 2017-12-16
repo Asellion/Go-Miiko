@@ -291,20 +291,23 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 	// Get color
 	var color int
 	if name == "Étincelante" {
-		color = 15844367
+		color = 16705182
 	} else if name == "Obsidienne" {
-		color = 15158332
+		color = 16496296
 	} else if name == "Absynthe" {
-		color = 3066993
+		color = 8321915
 	} else if name == "Ombre" {
-		color = 10181046
+		color = 16364540
+	} else if name == "Eel" {
+		color = 12503544
 	} else if name == "PNJ" {
-		color = 9807270
+		color = 10263708
 	}
 
 	// Edit the missing role
 	_, err = s.GuildRoleEdit(guildID, role.ID, name, color, false, role.Permissions, false)
 	if err != nil {
+		fmt.Println("Couldn't edit the permissions of the newly created role " + name + ".")
 		fmt.Println(err.Error())
 	}
 
