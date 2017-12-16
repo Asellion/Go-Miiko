@@ -161,7 +161,6 @@ func getPublicByeMessage(userID string) string {
 
 	// Legendary
 	byeList = append(byeList, "C'est en ce jour funeste que <@"+userID+"> nous a quitté. Puisse son âme rejoindre le cristal et son héritage mon porte-maanas.")
-	// byeList = append(byeList, "<@"+userID+">, en tant qu'ancien membre de notre serveur, a droit a une cérémonie d'adieu. 1. Tu ne dois jamais révéler des informations sensibles sur notre serveur à d'autres aussi longtemps que tu vivras. 2. Tu ne dois jamais utiliser d'anciens contacts rencontrés à travers ta présence dans le serveur pour un gain personnel. 3. Bien que nos chemins puissent avoir divergé, tu dois continuer à vivre ta vie de toutes tes forces, tu ne dois jamais considérer ta propre vie comme quelque chose d'insignifiant, et tu ne dois jamais oublier tes amis aussi longtemps que tu vis.")
 
 	// Random
 	seed := time.Now().UnixNano()
