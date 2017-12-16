@@ -191,7 +191,10 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.Contains(strings.ToLower(m.Content), "ombr") {
 		gardes = append(gardes, "Ombre")
 	}
-	if strings.Contains(strings.ToLower(m.Content), "joue pas") || strings.Contains(strings.ToLower(m.Content), "aucun") || strings.Contains(strings.ToLower(m.Content), "ai pas") || strings.Contains(strings.ToLower(m.Content), " quoi") {
+	if strings.Contains(strings.ToLower(m.Content), "eel") || strings.Contains(strings.ToLower(m.Content), "aucun") || strings.Contains(strings.ToLower(m.Content), "ai pas") || strings.Contains(strings.ToLower(m.Content), "pas encore") {
+		gardes = append(gardes, "Eel")
+	}
+	if strings.Contains(strings.ToLower(m.Content), "joue pas") || strings.Contains(strings.ToLower(m.Content), " quoi") {
 		gardes = append(gardes, "PNJ")
 	}
 
@@ -222,6 +225,8 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 		}
+
+		return
 	}
 
 	if garde == "Obsidienne" || garde == "Absynthe" || garde == "Ombre" {
@@ -243,9 +248,11 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 		}
+
+		return
 	}
 
-	if garde == "PNJ" {
+	if garde == "Eel" {
 
 		// Add role
 		err := s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
@@ -264,6 +271,31 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 		}
+
+		return
+	}
+
+	if garde == "PNJ" {
+
+		// Add role
+		err := s.GuildMemberRoleAdd(channel.GuildID, m.Author.ID, roleID)
+		if err != nil {
+			fmt.Println("Couldn't add a role.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Member : " + m.Author.Username)
+			fmt.Println(err.Error())
+			return
+		}
+
+		// Announce
+		_, err = s.ChannelMessageSend(m.ChannelID, "D'accord, <@"+m.Author.ID+">. Je t'ai donné le rôle <@&"+roleID+">, mais saches que ce serveur est dédié à Eldarya.")
+		if err != nil {
+			fmt.Println("Couldn't announce new role.")
+			fmt.Println("Channel : " + channel.Name)
+			fmt.Println(err.Error())
+		}
+
+		return
 	}
 }
 
