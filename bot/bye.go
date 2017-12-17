@@ -41,13 +41,8 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 	// Bot?
 	if m.User.Bot {
 
-		// Typing!
-		err = s.ChannelTyping(channel)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-
-		// Send message
+		// Bye bot!
+		s.ChannelTyping(channel)
 		_, err = s.ChannelMessageSend(channel, getByeBotMessage(m.User.ID))
 		if err != nil {
 			fmt.Println("Couldn't say bye to " + m.User.Username + "!")
@@ -64,26 +59,16 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 			return
 		}
 
-		// Typing!
-		err = s.ChannelTyping(privateChannel.ID)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-
 		// Send message
+		s.ChannelTyping(privateChannel.ID)
 		_, err = s.ChannelMessageSend(privateChannel.ID, getPrivateByeMessage(invite.Code))
 		if err != nil {
 			fmt.Println("Couldn't say bye to " + m.User.Username + "!")
 			fmt.Println(err.Error())
 		}
 
-		// Typing!
-		err = s.ChannelTyping(channel)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-
 		// Announce departure
+		err = s.ChannelTyping(channel)
 		_, err = s.ChannelMessageSend(channel, getPublicByeMessage(m.User.ID))
 		if err != nil {
 			fmt.Println("Couldn't announce the departure of " + m.User.Username + ".")
