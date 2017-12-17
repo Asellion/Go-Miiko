@@ -216,16 +216,14 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Announce
 	roleID := getRoleByName(s, channel.GuildID, garde)
-	if garde == "Étincelante" {
 
-		// Announce
+	if garde == "Étincelante" {
 		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde <@&"+roleID+">, envoie un message à <@"+guild.OwnerID+"> sur Eldarya pour annoncer ta présence. En attendant, dans quelle garde est ton personnage sur Eldarya?")
 		if err != nil {
 			fmt.Println("Couldn't send message for special role.")
 			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 		}
-
 		return
 	}
 
@@ -305,19 +303,14 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 	guildRoles, err := s.GuildRoles(guildID)
 	if err != nil {
 		fmt.Println(err.Error())
-	}
+	} else {
 
-	// Get the first occurence
-	for x := 0; x < len(guildRoles); x++ {
-		if guildRoles[x].Name == name {
-			return guildRoles[x].ID
+		// Get the first occurence
+		for x := 0; x < len(guildRoles); x++ {
+			if guildRoles[x].Name == name {
+				return guildRoles[x].ID
+			}
 		}
-	}
-
-	// Create the missing role
-	role, err := s.GuildRoleCreate(guildID)
-	if err != nil {
-		fmt.Println(err.Error())
 	}
 
 	// Get color
@@ -334,6 +327,16 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 		color = 12503544
 	} else if name == "PNJ" {
 		color = 10263708
+	} else {
+		return ""
+	}
+
+	// Create the missing role
+	role, err := s.GuildRoleCreate(guildID)
+	if err != nil {
+		fmt.Println("Couldn't create a role.")
+		fmt.Println(err.Error())
+		return ""
 	}
 
 	// Edit the missing role
@@ -341,6 +344,7 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 	if err != nil {
 		fmt.Println("Couldn't edit the permissions of the newly created role " + name + ".")
 		fmt.Println(err.Error())
+		return ""
 	}
 
 	return role.ID
