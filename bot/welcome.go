@@ -153,6 +153,7 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// Get guild structure
@@ -160,16 +161,22 @@ func placeInAGuard(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if err != nil {
 		fmt.Println("Couldn't get a guild structure.")
 		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + m.Author.Username)
+		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// Get guild member
 	member, err := s.GuildMember(channel.GuildID, m.Author.ID)
 	if err != nil {
 		fmt.Println("Couldn't get a member structure.")
+		fmt.Println("Guild : " + guild.Name)
 		fmt.Println("Channel : " + channel.Name)
 		fmt.Println("Author : " + m.Author.Username)
+		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
+		return
 	}
 
 	// If Author has no role
