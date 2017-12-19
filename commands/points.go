@@ -16,7 +16,7 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
-		fmt.Println("Couldn't get the channel structure of a said message.")
+		fmt.Println("Couldn't get a channel structure.")
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
@@ -26,7 +26,7 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get guild structure
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
-		fmt.Println("Couldn't get the guild structure of a said message.")
+		fmt.Println("Couldn't get a guild structure.")
 		fmt.Println("Channel : " + channel.Name)
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
@@ -39,7 +39,11 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelTyping(channel.ID)
 		_, err := s.ChannelMessageSend(channel.ID, "Désolée <@"+m.Author.ID+">! Je suis déjà en train de compter des points. Réessaie dans quelques minutes!")
 		if err != nil {
-			fmt.Println("Couldn't send a message in " + channel.Name + ".")
+			fmt.Println("Couldn't send a message.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Channel : " + channel.Name)
+			fmt.Println("Author : " + m.Author.Username)
+			fmt.Println("Message : " + m.Content)
 			fmt.Println(err.Error())
 		}
 		return
@@ -49,7 +53,11 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelTyping(channel.ID)
 	_, err = s.ChannelMessageSend(channel.ID, "<@"+m.Author.ID+"> Je compte les points de "+guild.Name+"! Ça peut prendre quelques minutes.")
 	if err != nil {
-		fmt.Println("Couldn't send a message in " + channel.Name + ".")
+		fmt.Println("Couldn't send a message.")
+		fmt.Println("Guild : " + guild.Name)
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + m.Author.Username)
+		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
 		return
 	}
@@ -63,7 +71,11 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelTyping(channel.ID)
 	feedback, err := s.ChannelMessageSend(channel.ID, "Je suis à 0%.")
 	if err != nil {
-		fmt.Println("Couldn't send a message in " + channel.Name + ".")
+		fmt.Println("Couldn't send a message.")
+		fmt.Println("Guild : " + guild.Name)
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + m.Author.Username)
+		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
 		return
 	}
@@ -76,9 +88,11 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 		progress := 100 * gIndex / len(guild.Channels)
 		_, err := s.ChannelMessageEdit(channel.ID, feedback.ID, "Je suis à "+strconv.Itoa(progress)+"%.")
 		if err != nil {
-			fmt.Println("Couldn't edit a message in " + channel.Name + ".")
+			fmt.Println("Couldn't edit a message.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Channel : " + channel.Name)
+			fmt.Println("Message : " + feedback.Content)
 			fmt.Println(err.Error())
-			return
 		}
 
 		// Pinned messages are obviously only in text channels.
@@ -87,20 +101,26 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// Get every pinned messages
-		messages, err := s.ChannelMessagesPinned(gChannel.ID)
+		cMessages, err := s.ChannelMessagesPinned(gChannel.ID)
 		if err != nil {
-			fmt.Println("Couldn't get pinned messages of ", gChannel.Name, ".")
+			fmt.Println("Couldn't get pinned messages.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Channel : " + gChannel.Name)
 			fmt.Println(err.Error())
 			continue
 		}
 
 		// For every messages
-		for _, message := range messages {
+		for _, cMessage := range cMessages {
 
 			// Get the author
-			member, err := s.GuildMember(guild.ID, message.Author.ID)
+			member, err := s.GuildMember(guild.ID, cMessage.Author.ID)
 			if err != nil {
-				fmt.Println("Couldn't get the member ", message.Author.Username, " in guild ", guild.Name, ".")
+				fmt.Println("Couldn't get a member.")
+				fmt.Println("Guild : " + guild.Name)
+				fmt.Println("Channel : " + gChannel.Name)
+				fmt.Println("Author : " + cMessage.Author.Username)
+				fmt.Println("Message : " + cMessage.Content)
 				fmt.Println(err.Error())
 				continue
 			}
@@ -115,7 +135,11 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Delete feedback message
 	err = s.ChannelMessageDelete(channel.ID, feedback.ID)
 	if err != nil {
-		fmt.Println("Couldn't delete a message in " + channel.Name + ".")
+		fmt.Println("Couldn't delete a message.")
+		fmt.Println("Guild : " + guild.Name)
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + feedback.Author.Username)
+		fmt.Println("Message : " + feedback.Content)
 		fmt.Println(err.Error())
 	}
 
@@ -123,7 +147,9 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 	for key, value := range points {
 		_, err := s.ChannelMessageSend(channel.ID, "<@&"+key+"> : "+strconv.Itoa(value))
 		if err != nil {
-			fmt.Println("Couldn't send a message in " + channel.Name + ".")
+			fmt.Println("Couldn't send a message.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Channel : " + channel.Name)
 			fmt.Println(err.Error())
 			continue
 		}
@@ -138,7 +164,9 @@ func GetPoints(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelTyping(channel.ID)
 	_, err = s.ChannelMessageSend(channel.ID, "Opération terminée en "+strconv.Itoa(minutes)+" minutes et "+strconv.Itoa(seconds)+" secondes.")
 	if err != nil {
-		fmt.Println("Couldn't send a message in " + channel.Name + ".")
+		fmt.Println("Couldn't send a message.")
+		fmt.Println("Guild : " + guild.Name)
+		fmt.Println("Channel : " + channel.Name)
 		fmt.Println(err.Error())
 	}
 

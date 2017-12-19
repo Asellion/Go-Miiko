@@ -26,29 +26,15 @@ func Popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if rand.Float64() <= 1/math.Pow(phi, 1) {
 
-			// Typing!
-			err := s.ChannelTyping(m.ChannelID)
-			if err != nil {
-				fmt.Println(err.Error())
-			}
-
 			// It's popcorn time!
-			_, err = s.ChannelMessageSend(m.ChannelID, getPopcornMessage())
+			s.ChannelTyping(m.ChannelID)
+			_, err := s.ChannelMessageSend(m.ChannelID, getPopcornMessage())
 			if err != nil {
 				fmt.Println("Couldn't tell everyone how much I love popcorn. Sad :(")
+				fmt.Println("Author : " + m.Author.Username)
+				fmt.Println("Message : " + m.Content)
 				fmt.Println(err.Error())
 			}
-		}
-	}
-
-	// Check for "Omae Wa Mou Shindeiru"
-	if strings.Contains(strings.ToLower(m.Content), "omae wa mou shindeiru") {
-
-		// Nani?!
-		_, err := s.ChannelMessageSend(m.ChannelID, getNaniMessage())
-		if err != nil {
-			fmt.Println("Couldn't express my surprize. Sad :(")
-			fmt.Println(err.Error())
 		}
 	}
 }
@@ -86,6 +72,7 @@ func getPopcornMessage() string {
 
 	// Uhh...
 	popcornList = append(popcornList, "Le popcorn, c'est bon et tout, mais il ne faut pas oublier les friandises. J'adore les friandises!")
+	popcornList = append(popcornList, "Imagine si... On mélangeait du popcorn... Avec des friandises!")
 
 	// Seed
 	seed := time.Now().UnixNano()
