@@ -1,4 +1,4 @@
-package bot
+package commands
 
 import (
 	"fmt"
@@ -10,7 +10,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
+// Popcorn command
+func Popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Check for "pop-corn", "popcorn", "maïs soufflé", "maïs éclaté", "pop corn"
 	if strings.Contains(strings.ToLower(m.Content), "popcorn") || strings.Contains(strings.ToLower(m.Content), "pop-corn") || strings.Contains(strings.ToLower(m.Content), "maïs soufflé") || strings.Contains(strings.ToLower(m.Content), "maïs éclaté") || strings.Contains(strings.ToLower(m.Content), "pop corn") {
@@ -93,26 +94,4 @@ func getPopcornMessage() string {
 
 	// Return
 	return popcornList[rand.Intn(len(popcornList))]
-}
-
-func getNaniMessage() string {
-
-	// Popcorn Messages
-	var naniList []string
-
-	naniList = append(naniList, "Nani?")
-	naniList = append(naniList, "Nani?!")
-	naniList = append(naniList, "Nani!?")
-	naniList = append(naniList, "**Nani?!**")
-	naniList = append(naniList, "**Nani!?**")
-	naniList = append(naniList, "**Nani ?!?**")
-	naniList = append(naniList, "**Nani !?!**")
-
-	// Seed
-	seed := time.Now().UnixNano()
-	source := rand.NewSource(seed)
-	rand := rand.New(source)
-
-	// Return
-	return naniList[rand.Intn(len(naniList))]
 }
