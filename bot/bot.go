@@ -144,7 +144,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 							// Anti-Spam
 							if counting {
 								s.ChannelTyping(channel.ID)
-								_, err := s.ChannelMessageSend(channel.ID, "Désolée! Je suis déjà en train de compter des points. Réessaie dans quelques minutes!")
+								_, err := s.ChannelMessageSend(channel.ID, "Désolée <@"+m.Author.ID+">! Je suis déjà en train de compter des points. Réessaie dans quelques minutes!")
 								if err != nil {
 									fmt.Println("Couldn't send a message in " + channel.Name + ".")
 									fmt.Println(err.Error())
@@ -154,7 +154,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 							// Announce
 							s.ChannelTyping(channel.ID)
-							_, err := s.ChannelMessageSend(channel.ID, "Je compte les points de "+guild.Name+"! Ça peut prendre quelques minutes.")
+							_, err := s.ChannelMessageSend(channel.ID, "<@"+m.Author.ID+"> Je compte les points de "+guild.Name+"! Ça peut prendre quelques minutes.")
 							if err != nil {
 								fmt.Println("Couldn't send a message in " + channel.Name + ".")
 								fmt.Println(err.Error())
