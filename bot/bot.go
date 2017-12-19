@@ -81,7 +81,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if channel.Type == discordgo.ChannelTypeDM {
 
 		// Popcorn?
-		popcorn(s, m)
+		commands.Popcorn(s, m)
 
 		if config.BotMasterChannelID == "" {
 
