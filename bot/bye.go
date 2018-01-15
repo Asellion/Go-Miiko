@@ -20,8 +20,8 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 	}
 
 	// Get channel
-	channel := config.GetWelcomeChannelByGuildID(guild.ID)
-	if channel == "" {
+	channel, exists := config.Database.WelcomeChannels[guild.ID]
+	if !exists {
 		return
 	}
 

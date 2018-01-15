@@ -68,14 +68,48 @@ func GetWelcomeChannel(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	s.ChannelTyping(channel.ID)
-	_, err = s.ChannelMessageSend(channel.ID, "Le salon de bienvenue est <#"+config.GetWelcomeChannelByGuildID(guild.ID)+">.")
-	if err != nil {
-		fmt.Println("Couldn't send a message.")
-		fmt.Println("Guild : " + guild.Name)
-		fmt.Println("Channel : " + channel.Name)
-		fmt.Println("Author : " + m.Author.Username)
-		fmt.Println("Message : " + m.Content)
-		fmt.Println(err.Error())
+	// Does it exists?
+	welcomestring, exists := config.Database.WelcomeChannels[guild.ID]
+
+	if exists {
+
+		// Get channel structure
+		welcomechannel, err := s.State.Channel(welcomestring)
+		if err != nil {
+			fmt.Println(guild.Name + "'s welcome channel doesn't exist anymore.")
+			fmt.Println(err.Error())
+			return
+		}
+
+		// Send the welcome channel
+		s.ChannelTyping(channel.ID)
+		_, err = s.ChannelMessageSend(channel.ID, "Le salon de bienvenue est <#"+welcomechannel.ID+">.")
+		if err != nil {
+			fmt.Println("Couldn't send a message.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Channel : " + channel.Name)
+			fmt.Println("Author : " + m.Author.Username)
+			fmt.Println("Message : " + m.Content)
+			fmt.Println(err.Error())
+			return
+		}
+
+	} else {
+
+		// Let it be this one
+		config.Database.WelcomeChannels[guild.ID] = channel.ID
+
+		// Send the welcome channel
+		s.ChannelTyping(channel.ID)
+		_, err = s.ChannelMessageSend(channel.ID, "Le salon de bienvenue est <#"+channel.ID+">.")
+		if err != nil {
+			fmt.Println("Couldn't send a message.")
+			fmt.Println("Guild : " + guild.Name)
+			fmt.Println("Channel : " + channel.Name)
+			fmt.Println("Author : " + m.Author.Username)
+			fmt.Println("Message : " + m.Content)
+			fmt.Println(err.Error())
+			return
+		}
 	}
 }

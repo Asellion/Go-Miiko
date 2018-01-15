@@ -13,8 +13,8 @@ import (
 // Ask for the guard.
 func askForGuard(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
-	welcomeChannelID := config.GetWelcomeChannelByGuildID(m.GuildID)
-	if welcomeChannelID == "" {
+	welcomeChannelID, exists := config.Database.WelcomeChannels[m.GuildID]
+	if !exists {
 		fmt.Println("There are no defined welcome channel for this guild.")
 		return
 	}

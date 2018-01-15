@@ -9,15 +9,8 @@ import (
 
 func main() {
 
-	// Reads the configuration
-	err := config.ReadConfig()
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-
 	// Reads the JSON database
-	err = config.ReadJSON()
+	err := config.ReadJSON()
 	if err != nil {
 		fmt.Println(err.Error())
 		config.WriteNewJSON()

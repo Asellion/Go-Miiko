@@ -17,7 +17,7 @@ var goBot *discordgo.Session
 func Start() {
 
 	// Go online!
-	goBot, err := discordgo.New("Bot " + config.Token)
+	goBot, err := discordgo.New("Bot " + config.Database.Token)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -83,25 +83,42 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// Popcorn?
 		commands.Popcorn(s, m)
 
-		if config.BotMasterChannelID == "" {
+		if config.Database.MasterID == "" {
 
 			// No BotMaster
 			fmt.Println(m.Author.Username + " : " + m.Content)
 
-		} else if m.ChannelID == config.BotMasterChannelID {
+		} else if m.Author.ID == config.Database.MasterID {
 
 			// Talking to Master
 
 		} else {
 
-			// Foward the message to BotMaster!
-			s.ChannelTyping(config.BotMasterChannelID)
-			_, err := s.ChannelMessageSend(config.BotMasterChannelID, "<@"+m.Author.ID+"> : "+m.Content)
+			// Get Master's User
+			user, err := s.User(config.Database.MasterID)
 			if err != nil {
-				fmt.Println("Couldn't foward a message to Master.")
+				fmt.Println("Couldn't get Master's User!")
+				fmt.Println(err.Error())
+				return
+			}
+
+			// Create channel with Master
+			masterChannel, err := s.UserChannelCreate(config.Database.MasterID)
+			if err != nil {
+				fmt.Println("Couldn't create a private channel with " + user.Username + ".")
+				fmt.Println(err.Error())
+				return
+			}
+
+			// Foward the message to BotMaster!
+			s.ChannelTyping(masterChannel.ID)
+			_, err = s.ChannelMessageSend(masterChannel.ID, "<@"+m.Author.ID+"> : "+m.Content)
+			if err != nil {
+				fmt.Println("Couldn't foward a message to " + user.Username + ".")
 				fmt.Println("Author : " + m.Author.Username)
 				fmt.Println("Message : " + m.Content)
 				fmt.Println(err.Error())
+				return
 			}
 		}
 		return
