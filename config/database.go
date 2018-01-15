@@ -66,6 +66,7 @@ func WriteNewJSON() error {
 	fmt.Println("Creating a new database.")
 	var newDatabase database
 	Database = newDatabase
+	Database.WelcomeChannels = make(map[string]string)
 	return WriteJSON()
 }
 
@@ -78,6 +79,11 @@ func UpdateWelcomeChannel(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Println("Couldn't get the channel structure!")
 		fmt.Println(err.Error())
 		return
+	}
+
+	// Create a new map
+	if len(Database.WelcomeChannels) == 0 {
+		Database.WelcomeChannels = make(map[string]string)
 	}
 
 	// Update the value
