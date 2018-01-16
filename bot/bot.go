@@ -148,6 +148,13 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				// Split
 				command := strings.Split(m.Content, " ")
 
+				// Commands with 2 words
+				if len(command) == 2 {
+					if command[1] == "prune" {
+						commands.Prune(s, m)
+					}
+				}
+
 				// Commands with 3 words
 				if len(command) == 3 {
 					if command[1] == "get" {
