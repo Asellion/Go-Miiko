@@ -35,6 +35,10 @@ func Prune(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	if m.Author.ID != guild.OwnerID {
+		return
+	}
+
 	// Check if already pruning
 	alreadyPruning, exists := pruning[guild.ID]
 	if exists {
