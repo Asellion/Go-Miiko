@@ -69,21 +69,24 @@ func GetWelcomeChannel(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// Does it exists?
-	welcomestring, exists := config.Database.WelcomeChannels[guild.ID]
+	welcomeChannelID, exists := config.Database.WelcomeChannels[guild.ID]
 
 	if exists {
 
 		// Get channel structure
-		welcomechannel, err := s.State.Channel(welcomestring)
+		welcomeChannel, err := s.State.Channel(welcomeChannelID)
 		if err != nil {
 			fmt.Println(guild.Name + "'s welcome channel doesn't exist anymore.")
 			fmt.Println(err.Error())
-			return
+
+			// Set this channel as the WelcomeChannel
+			config.UpdateWelcomeChannel(s, m)
+			welcomeChannel = channel
 		}
 
 		// Send the welcome channel
 		s.ChannelTyping(channel.ID)
-		_, err = s.ChannelMessageSend(channel.ID, "Le salon de bienvenue est <#"+welcomechannel.ID+">.")
+		_, err = s.ChannelMessageSend(channel.ID, "Le salon de bienvenue est <#"+welcomeChannel.ID+">.")
 		if err != nil {
 			fmt.Println("Couldn't send a message.")
 			fmt.Println("Guild : " + guild.Name)
@@ -97,7 +100,7 @@ func GetWelcomeChannel(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else {
 
 		// Let it be this one
-		config.Database.WelcomeChannels[guild.ID] = channel.ID
+		config.UpdateWelcomeChannel(s, m)
 
 		// Send the welcome channel
 		s.ChannelTyping(channel.ID)
