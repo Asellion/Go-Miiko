@@ -67,7 +67,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
-		fmt.Println("Couldn't get the channel structure of a said message.")
+		fmt.Println("Couldn't handle the channel structure of a message.")
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
@@ -77,7 +77,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get guild structure
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
-		fmt.Println("Couldn't get the guild structure of a said message.")
+		fmt.Println("Couldn't handle the guild structure of a message.")
 		fmt.Println("Channel : " + channel.Name)
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
