@@ -6,41 +6,41 @@ import (
 	"strings"
 	"time"
 
-	"github.com/NatoBoram/Go-Miiko/config"
 	"github.com/bwmarrin/discordgo"
 )
 
 // Ask for the guard.
 func askForGuard(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+	/*
+		welcomeChannelID, exists := config.Database.WelcomeChannels[m.GuildID]
+		if !exists {
+			fmt.Println("There are no defined welcome channel for this guild.")
+			return
+		}
 
-	welcomeChannelID, exists := config.Database.WelcomeChannels[m.GuildID]
-	if !exists {
-		fmt.Println("There are no defined welcome channel for this guild.")
-		return
-	}
-
-	// Typing!
-	err := s.ChannelTyping(welcomeChannelID)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	if !m.User.Bot {
-
-		// Ask newcomer what's their guard
-		_, err = s.ChannelMessageSend(welcomeChannelID, getWelcomeMessage(m.User.ID))
+		// Typing!
+		err := s.ChannelTyping(welcomeChannelID)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
 
-	} else {
+		if !m.User.Bot {
 
-		// Fear the bot!
-		_, err = s.ChannelMessageSend(welcomeChannelID, getWelcomeBotMessage(m.User.ID))
-		if err != nil {
-			fmt.Println(err.Error())
+			// Ask newcomer what's their guard
+			_, err = s.ChannelMessageSend(welcomeChannelID, getWelcomeMessage(m.User.ID))
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+		} else {
+
+			// Fear the bot!
+			_, err = s.ChannelMessageSend(welcomeChannelID, getWelcomeBotMessage(m.User.ID))
+			if err != nil {
+				fmt.Println(err.Error())
+			}
 		}
-	}
+	*/
 }
 
 func getWelcomeMessage(username string) string {

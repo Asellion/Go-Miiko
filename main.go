@@ -6,6 +6,7 @@ import (
 	"github.com/NatoBoram/Go-Miiko/bot"
 	"github.com/NatoBoram/Go-Miiko/config"
 	"github.com/bwmarrin/discordgo"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -70,7 +71,7 @@ func main() {
 	defer session.Close()
 
 	// Give this bot some life!
-	err = bot.Start(db, session)
+	err = bot.Start(db, session, discord.MasterID)
 	if err != nil {
 		println(err.Error())
 		return

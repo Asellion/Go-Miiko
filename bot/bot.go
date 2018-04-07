@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/NatoBoram/Go-Miiko/commands"
-	"github.com/NatoBoram/Go-Miiko/config"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -92,19 +91,19 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// Popcorn?
 		commands.Popcorn(s, m)
 
-		if config.Database.MasterID == "" {
+		if Master.ID == "" {
 
 			// No BotMaster
 			fmt.Println(m.Author.Username + " : " + m.Content)
 
-		} else if m.Author.ID == config.Database.MasterID {
+		} else if m.Author.ID == Master.ID {
 
 			// Talking to Master
 
 		} else {
 
 			// Get Master's User
-			user, err := s.User(config.Database.MasterID)
+			user, err := s.User(Master.ID)
 			if err != nil {
 				fmt.Println("Couldn't get Master's User!")
 				fmt.Println(err.Error())
@@ -112,7 +111,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 
 			// Create channel with Master
-			masterChannel, err := s.UserChannelCreate(config.Database.MasterID)
+			masterChannel, err := s.UserChannelCreate(Master.ID)
 			if err != nil {
 				fmt.Println("Couldn't create a private channel with " + user.Username + ".")
 				fmt.Println(err.Error())
@@ -133,11 +132,13 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	// Update welcome channel
-	if m.Type == discordgo.MessageTypeGuildMemberJoin {
-		config.UpdateWelcomeChannel(s, m)
-		return
-	}
+	/*
+		// Update welcome channel
+		if m.Type == discordgo.MessageTypeGuildMemberJoin {
+			config.UpdateWelcomeChannel(s, m)
+			return
+		}
+	*/
 
 	// Bot?
 	if m.Author.Bot {
