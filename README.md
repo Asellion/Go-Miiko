@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/NatoBoram/Go-Miiko.svg?branch=master)](https://travis-ci.org/NatoBoram/Go-Miiko)
 [![Go Report Card](https://goreportcard.com/badge/github.com/NatoBoram/Go-Miiko)](https://goreportcard.com/report/github.com/NatoBoram/Go-Miiko)
+[![GoDoc](https://godoc.org/github.com/NatoBoram/Go-Miiko?status.svg)](https://godoc.org/github.com/NatoBoram/Go-Miiko)
 
 Go-Miiko is a [Discord](https://discordapp.com/) bot that takes care of [Eldarya](http://www.eldarya.fr/) themed Discord servers. It's written in [Go](https://golang.org/) with the help of [DiscordGo](https://github.com/bwmarrin/discordgo). Right now, she only speaks French. As a result, she can only be used in a French server.
 
