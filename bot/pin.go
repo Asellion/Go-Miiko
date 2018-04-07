@@ -27,8 +27,8 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	message, err := s.ChannelMessage(m.ChannelID, m.MessageID)
 	if err != nil {
 		fmt.Println("Couldn't get the message structure of a MessageReactionAdd!")
-		fmt.Println("m.ChannelID : " + m.ChannelID)
-		fmt.Println("m.MessageID : " + m.MessageID)
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("MessageID : " + m.MessageID)
 		fmt.Println(err.Error())
 		return
 	}
@@ -37,7 +37,9 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
 		fmt.Println("Couldn't get the guild structure of a MessageReactionAdd!")
-		fmt.Println("channel.GuildID : " + channel.GuildID)
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + message.Author.Username)
+		fmt.Println("Message : " + message.Content)
 		fmt.Println(err.Error())
 		return
 	}

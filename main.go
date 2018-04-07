@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/NatoBoram/Go-Miiko/bot"
 	"github.com/NatoBoram/Go-Miiko/config"
@@ -19,18 +20,18 @@ var (
 func main() {
 
 	// License
-	println("")
-	println("Go-Miiko : Manages an Eldarya-themed Discord server.")
-	println("Copyright © 2018 Nato Boram")
-	println("This program is free software : you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY ; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.")
-	println("Contact : https://github.com/NatoBoram/Go-Miiko")
-	println("")
+	fmt.Println("")
+	fmt.Println("Go-Miiko : Manages an Eldarya-themed Discord server.")
+	fmt.Println("Copyright © 2018 Nato Boram")
+	fmt.Println("This program is free software : you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY ; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.")
+	fmt.Println("Contact : https://github.com/NatoBoram/Go-Miiko")
+	fmt.Println("")
 
 	// Read the database config
 	err := config.ReadDB(&database)
 	if err != nil {
-		println("Could not load the database configuration.")
-		println(err.Error())
+		fmt.Println("Could not load the database configuration.")
+		fmt.Println(err.Error())
 		config.WriteTemplateDB()
 		return
 	}
@@ -38,8 +39,8 @@ func main() {
 	// Read the Discord config
 	err = config.ReadDiscord(&discord)
 	if err != nil {
-		println("Could not load the Discord configuration.")
-		println(err.Error())
+		fmt.Println("Could not load the Discord configuration.")
+		fmt.Println(err.Error())
 		config.WriteTemplateDiscord()
 		return
 	}
@@ -47,8 +48,8 @@ func main() {
 	// Connect to MariaDB
 	db, err = sql.Open("mysql", database.User+":"+database.Password+"@tcp("+database.Address+":"+database.Port+")/"+database.Database)
 	if err != nil {
-		println("Could not connect to the database.")
-		println(err.Error())
+		fmt.Println("Could not connect to the database.")
+		fmt.Println(err.Error())
 		return
 	}
 	defer db.Close()
@@ -56,16 +57,16 @@ func main() {
 	// Create a Discord session
 	session, err = discordgo.New("Bot " + discord.Token)
 	if err != nil {
-		println("Could not create a Discord session.")
-		println(err.Error())
+		fmt.Println("Could not create a Discord session.")
+		fmt.Println(err.Error())
 		return
 	}
 
 	// Connect to Discord
 	err = session.Open()
 	if err != nil {
-		println("Could not connect to Discord.")
-		println(err.Error())
+		fmt.Println("Could not connect to Discord.")
+		fmt.Println(err.Error())
 		return
 	}
 	defer session.Close()
@@ -73,7 +74,7 @@ func main() {
 	// Give this bot some life!
 	err = bot.Start(db, session, discord.MasterID)
 	if err != nil {
-		println(err.Error())
+		fmt.Println(err.Error())
 		return
 	}
 
