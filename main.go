@@ -17,6 +17,14 @@ var (
 
 func main() {
 
+	// License
+	println("")
+	println("Go-Miiko : Manages an Eldarya-themed Discord server.")
+	println("Copyright © 2018 Nato Boram")
+	println("This program is free software : you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY ; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.")
+	println("Contact : https://github.com/NatoBoram/Go-Miiko")
+	println("")
+
 	// Read the database config
 	err := config.ReadDB(&database)
 	if err != nil {
@@ -59,14 +67,7 @@ func main() {
 		println(err.Error())
 		return
 	}
-
-	// License
-	println("")
-	println("Go-Miiko : Manages an Eldarya-themed Discord server.")
-	println("Copyright © 2018 Nato Boram")
-	println("This program is free software : you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY ; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.")
-	println("Contact : https://github.com/NatoBoram/Go-Miiko")
-	println("")
+	defer session.Close()
 
 	// Give this bot some life!
 	bot.Start(db, session)
