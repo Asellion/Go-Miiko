@@ -51,7 +51,7 @@ func Start(db *sql.DB, session *discordgo.Session, master string) error {
 	// Set Initial Values
 
 	// It's alive!
-	fmt.Println("Hi, Master " + Master.Username + ". I am Miiko, and everything's all right!")
+	fmt.Println("Hi, master " + Master.Username + ". I am " + Me.Username + ", and everything's all right!")
 
 	// Everything is fine!
 	return nil
