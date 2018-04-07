@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 
@@ -10,43 +11,38 @@ import (
 )
 
 // BotID : Numerical ID of the bot
-var BotID string
-var goBot *discordgo.Session
+var (
+	DB *sql.DB
+	Me *User
+)
 
 // Start : Starts the bot.
-func Start() {
+func Start(db *sql.DB, session *discordgo.Session) error {
 
-	// Go online!
-	goBot, err := discordgo.New("Bot " + config.Database.Token)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
+	// Database
+	DB = db
 
-	// Get Bot ID
-	u, err := goBot.User("@me")
+	// Myself
+	me, err := session.User("@me")
 	if err != nil {
-		fmt.Println("Couldn't get the BotID.")
-		fmt.Println(err.Error())
-		return
+		fmt.Println("Couldn't get myself.")
+		return err
 	}
-	BotID = u.ID
+	Me = me
 
 	// Hey, listen!
-	goBot.AddHandler(messageHandler)
-	goBot.AddHandler(reactHandler)
-	goBot.AddHandler(leaveHandler)
-	goBot.AddHandler(joinHandler)
+	//session.AddHandler(messageHandler)
+	//session.AddHandler(reactHandler)
+	//session.AddHandler(leaveHandler)
+	//session.AddHandler(joinHandler)
 
-	// Crash on error
-	err = goBot.Open()
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
+	// Set Initial Values
 
 	// It's alive!
 	fmt.Println("Hi, Master. I am Miiko, and everything's all right!")
+
+	// Everything is fine!
+	return nil
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {

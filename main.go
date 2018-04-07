@@ -70,7 +70,11 @@ func main() {
 	defer session.Close()
 
 	// Give this bot some life!
-	bot.Start(db, session)
+	err = bot.Start(db, session)
+	if err != nil {
+		println(err.Error())
+		return
+	}
 
 	// Wait for future input
 	<-make(chan struct{})
