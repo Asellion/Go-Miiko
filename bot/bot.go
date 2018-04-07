@@ -10,25 +10,38 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// BotID : Numerical ID of the bot
 var (
+	// DB : Connection to the database.
 	DB *sql.DB
-	Me *User
+
+	// Me : The bot itself.
+	Me *discordgo.User
+
+	// Master : UserID of the bot's master.
+	Master *discordgo.User
 )
 
 // Start : Starts the bot.
-func Start(db *sql.DB, session *discordgo.Session) error {
+func Start(db *sql.DB, session *discordgo.Session, master string) error {
 
 	// Database
 	DB = db
 
 	// Myself
-	me, err := session.User("@me")
+	user, err := session.User("@me")
 	if err != nil {
 		fmt.Println("Couldn't get myself.")
 		return err
 	}
-	Me = me
+	Me = user
+
+	// Master
+	user, err = session.User(master)
+	if err != nil {
+		fmt.Println("Couldn't recognize my master.")
+		return err
+	}
+	Master = user
 
 	// Hey, listen!
 	//session.AddHandler(messageHandler)
@@ -39,7 +52,7 @@ func Start(db *sql.DB, session *discordgo.Session) error {
 	// Set Initial Values
 
 	// It's alive!
-	fmt.Println("Hi, Master. I am Miiko, and everything's all right!")
+	fmt.Println("Hi, Master " + Master.Username + ". I am Miiko, and everything's all right!")
 
 	// Everything is fine!
 	return nil
@@ -48,7 +61,7 @@ func Start(db *sql.DB, session *discordgo.Session) error {
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Myself?
-	if m.Author.ID == BotID {
+	if m.Author.ID == Me.ID {
 		return
 	}
 
@@ -139,7 +152,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		for x := 0; x < len(m.Mentions); x++ {
 
 			// Mentionned me?
-			if m.Mentions[x].ID == BotID {
+			if m.Mentions[x].ID == Me.ID {
 
 				// Split
 				command := strings.Split(m.Content, " ")
@@ -201,7 +214,7 @@ func leaveHandler(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 func joinHandler(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
 	// Myself?
-	if m.User.ID != BotID {
+	if m.User.ID != Me.ID {
 
 		// Ask for guard
 		askForGuard(s, m)
