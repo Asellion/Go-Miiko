@@ -95,119 +95,64 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	// DM?
-	if channel.Type == discordgo.ChannelTypeDM {
-
-		// Popcorn?
-		commands.Popcorn(s, m)
-
-		if Master.ID == "" {
-
-			// No BotMaster
-			fmt.Println(m.Author.Username + " : " + m.Content)
-
-		} else if m.Author.ID == Master.ID {
-
-			// Talking to Master
-
-		} else {
-
-			// Get Master's User
-			user, err := s.User(Master.ID)
-			if err != nil {
-				fmt.Println("Couldn't get Master's User!")
-				fmt.Println(err.Error())
-				return
-			}
-
-			// Create channel with Master
-			masterChannel, err := s.UserChannelCreate(Master.ID)
-			if err != nil {
-				fmt.Println("Couldn't create a private channel with " + user.Username + ".")
-				fmt.Println(err.Error())
-				return
-			}
-
-			// Forward the message to BotMaster!
-			s.ChannelTyping(masterChannel.ID)
-			_, err = s.ChannelMessageSend(masterChannel.ID, "<@"+m.Author.ID+"> : "+m.Content)
-			if err != nil {
-				fmt.Println("Couldn't forward a message to " + user.Username + ".")
-				fmt.Println("Author : " + m.Author.Username)
-				fmt.Println("Message : " + m.Content)
-				fmt.Println(err.Error())
-				return
-			}
-		}
+	// Update welcome channel
+	if m.Type == discordgo.MessageTypeGuildMemberJoin {
+		commands.SetWelcomeChannel(DB, s, guild, channel)
 		return
 	}
 
-	/*
-		// Update welcome channel
-		if m.Type == discordgo.MessageTypeGuildMemberJoin {
-			config.UpdateWelcomeChannel(s, m)
-			return
-		}
-	*/
+	// Functions 2.0
+	done := false
 
-	// Bot?
-	if m.Author.Bot {
+	// Guard
+	done = commands.PlaceInAGuard(s, guild, channel, member, m.Message)
+	if done {
 		return
 	}
 
-	// Place in a guard
-	commands.PlaceInAGuard(s, guild, channel, member, m.Message)
+	// Nani?!
+	done = commands.Nani(s, m.Message)
+	if done {
+		return
+	}
+
+	// Popcorn!
+	done = commands.Popcorn(s, channel, m.Message)
+	if done {
+		return
+	}
+
+	// Forward to Master.
+	done = forward(s, channel, m.Message)
+	if done {
+		return
+	}
 
 	// Mentionned someone?
-	if len(m.Mentions) > 0 {
-		for x := 0; x < len(m.Mentions); x++ {
+	if len(m.Mentions) == 1 {
 
-			// Mentionned me?
-			if m.Mentions[x].ID == Me.ID {
+		// Mentionned me?
+		if m.Mentions[0].ID == Me.ID {
 
-				// Split
-				command := strings.Split(m.Content, " ")
+			// Split
+			command := strings.Split(m.Content, " ")
 
-				// Commands with 2 words
-				if len(command) == 2 {
-					if command[1] == "prune" {
-						commands.Prune(s, m)
-					}
-				}
-
-				// Commands with 3 words
-				if len(command) == 3 {
-					if command[1] == "get" {
-						if command[2] == "points" {
-							commands.GetPoints(s, m)
-						}
-					}
-				}
-
-				// Commands with 4 words
-				if len(command) == 4 {
-					if command[1] == "set" {
-						if command[2] == "welcome" {
-							if command[3] == "channel" && m.Author.ID == guild.OwnerID {
-								commands.SetWelcomeChannel(s, m)
-							}
-						}
-					}
-					if command[1] == "get" {
-						if command[2] == "welcome" {
-							if command[3] == "channel" {
-								commands.GetWelcomeChannel(s, m)
-							}
-						}
-					}
+			// Redirect commands
+			if len(command) > 1 {
+				switch command[1] {
+				case "prune":
+					commands.Prune(s, m)
+					break
+				case "get":
+					commands.Get()
+					break
+				case "set":
+					commands.Set()
+					break
 				}
 			}
 		}
 	}
-
-	// Reactions
-	commands.Popcorn(s, m)
-	commands.Nani(s, m)
 }
 
 func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
