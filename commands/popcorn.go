@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/NatoBoram/Go-Miiko/wheel"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -16,15 +17,12 @@ func Popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Check for "pop-corn", "popcorn", "maïs soufflé", "maïs éclaté", "pop corn"
 	if strings.Contains(strings.ToLower(m.Content), "popcorn") || strings.Contains(strings.ToLower(m.Content), "pop-corn") || strings.Contains(strings.ToLower(m.Content), "maïs soufflé") || strings.Contains(strings.ToLower(m.Content), "maïs éclaté") || strings.Contains(strings.ToLower(m.Content), "pop corn") {
 
-		// Get phi
-		phi := (1 + math.Sqrt(5)) / 2
-
 		// Seed
 		seed := time.Now().UnixNano()
 		source := rand.NewSource(seed)
 		rand := rand.New(source)
 
-		if rand.Float64() <= 1/math.Pow(phi, 1) {
+		if rand.Float64() <= 1/math.Pow(wheel.Phi(), 1) {
 
 			// It's popcorn time!
 			s.ChannelTyping(m.ChannelID)
