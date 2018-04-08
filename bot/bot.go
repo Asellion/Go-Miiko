@@ -202,21 +202,22 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
-	// Get channel structure
-	channel, err := s.Channel(m.ChannelID)
-	if err != nil {
-		fmt.Println("Couldn't get the channel structure of a MessageReactionAdd!")
-		fmt.Println("m.ChannelID : " + m.ChannelID)
-		fmt.Println(err.Error())
-		return
-	}
-
 	// Get the message structure
 	message, err := s.ChannelMessage(m.ChannelID, m.MessageID)
 	if err != nil {
 		fmt.Println("Couldn't get the message structure of a MessageReactionAdd!")
-		fmt.Println("Channel : " + channel.Name)
-		fmt.Println("MessageID : " + m.MessageID)
+		fmt.Println("ChannelID : " + m.ChannelID)
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Get channel structure
+	channel, err := s.Channel(m.ChannelID)
+	if err != nil {
+		fmt.Println("Couldn't get the channel structure of a MessageReactionAdd!")
+		fmt.Println("ChannelID : " + m.ChannelID)
+		fmt.Println("Author : " + message.Author.Username)
+		fmt.Println("Message : " + message.Content)
 		fmt.Println(err.Error())
 		return
 	}
