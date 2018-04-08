@@ -35,7 +35,7 @@ func waitComeBack(s *discordgo.Session, g *discordgo.Guild, m *discordgo.Member)
 
 		// Bye bot!
 		s.ChannelTyping(channel.ID)
-		_, err = s.ChannelMessageSend(channel.ID, getByeBotMessage(m.User.ID))
+		_, err = s.ChannelMessageSend(channel.ID, getByeBotMessage(m.User))
 		if err != nil {
 			fmt.Println("Couldn't say bye to " + m.User.Username + "!")
 			fmt.Println(err.Error())
@@ -45,7 +45,7 @@ func waitComeBack(s *discordgo.Session, g *discordgo.Guild, m *discordgo.Member)
 
 		// Announce departure
 		err = s.ChannelTyping(channel.ID)
-		_, err = s.ChannelMessageSend(channel.ID, getPublicByeMessage(m.User.ID))
+		_, err = s.ChannelMessageSend(channel.ID, getPublicByeMessage(m.User))
 		if err != nil {
 			fmt.Println("Couldn't announce the departure of " + m.User.Username + ".")
 			fmt.Println(err.Error())
@@ -102,56 +102,56 @@ func getPrivateByeMessage(inviteCode string) string {
 	return byeList[rand.Intn(len(byeList))]
 }
 
-func getPublicByeMessage(userID string) string {
+func getPublicByeMessage(user *discordgo.User) string {
 
 	// Bye Messages
 	byeList := [...]string{
 
 		// Messages
-		"J'ai le regret d'annoncer le départ de <@" + userID + ">.",
-		"C'est avec émotion que j'annonce le départ de <@" + userID + ">.",
-		"L'Oracle a emporté <@" + userID + "> avec elle.",
-		"<@" + userID + "> a quitté la garde.",
-		"Attends, <@" + userID + ">, reviens!",
-		"<@" + userID + "> a pris son envol!",
-		"<@" + userID + "> vole de ses propres ailes.",
-		"<@" + userID + "> part à l'aventure!",
-		"L'aventure de <@" + userID + "> se termine ici.",
-		"La garde se souviendra de <@" + userID + ">.",
-		"Il pleut lorsque je regarde vers <@" + userID + ">.",
-		"Mon coeur se serre à l'annonce du départ de <@" + userID + ">.",
-		"<@" + userID + "> a donné sa démission.",
-		"Que la force soit avec <@" + userID + ">.",
+		"J'ai le regret d'annoncer le départ de <@" + user.ID + ">.",
+		"C'est avec émotion que j'annonce le départ de <@" + user.ID + ">.",
+		"L'Oracle a emporté <@" + user.ID + "> avec elle.",
+		"<@" + user.ID + "> a quitté la garde.",
+		"Attends, <@" + user.ID + ">, reviens!",
+		"<@" + user.ID + "> a pris son envol!",
+		"<@" + user.ID + "> vole de ses propres ailes.",
+		"<@" + user.ID + "> part à l'aventure!",
+		"L'aventure de <@" + user.ID + "> se termine ici.",
+		"La garde se souviendra de <@" + user.ID + ">.",
+		"Il pleut lorsque je regarde vers <@" + user.ID + ">.",
+		"Mon coeur se serre à l'annonce du départ de <@" + user.ID + ">.",
+		"<@" + user.ID + "> a donné sa démission.",
+		"Que la force soit avec <@" + user.ID + ">.",
 
 		// Death
-		"Repose en paix, <@" + userID + ">.",
-		"Pourquoi, <@" + userID + ">, pourquoi?",
-		"<@" + userID + "> s'est fait dévorer par un Hydracarys.",
-		"<@" + userID + "> a marché dans une toile de Chead.",
-		"Un Black Gallytrot a démembré <@" + userID + ">.",
-		"La foudre a frappé <@" + userID + ">.",
-		"Je suis attristée d'apprendre la perte soudaine de <@" + userID + ">.",
-		"Mon coeur est avec <@" + userID + "> en ce temps de tristesse.",
-		"Mes sincères condoléances pour la perte de <@" + userID + ">.",
-		"Les mots ne peuvent exprimer combien je suis attristée d'apprendre la perte de <@" + userID + ">.",
-		"Mes pensées et mes prières sont avec <@" + userID + "> pendant cette période tragique.",
-		"Mes plus sincères condoléances pour la perte de <@" + userID + ">.",
-		"Que Dieu bénisse <@" + userID + "> en ce moment de tristesse.",
-		"Je suis vraiment attristée d'apprendre la mort de <@" + userID + ">.",
-		"Puisse <@" + userID + "> reposer en paix.",
-		"C'est avec une grande tristesse que j'ai appris le décès de <@" + userID + ">.",
+		"Repose en paix, <@" + user.ID + ">.",
+		"Pourquoi, <@" + user.ID + ">, pourquoi?",
+		"<@" + user.ID + "> s'est fait dévorer par un Hydracarys.",
+		"<@" + user.ID + "> a marché dans une toile de Chead.",
+		"Un Black Gallytrot a démembré <@" + user.ID + ">.",
+		"La foudre a frappé <@" + user.ID + ">.",
+		"Je suis attristée d'apprendre la perte soudaine de <@" + user.ID + ">.",
+		"Mon coeur est avec <@" + user.ID + "> en ce temps de tristesse.",
+		"Mes sincères condoléances pour la perte de <@" + user.ID + ">.",
+		"Les mots ne peuvent exprimer combien je suis attristée d'apprendre la perte de <@" + user.ID + ">.",
+		"Mes pensées et mes prières sont avec <@" + user.ID + "> pendant cette période tragique.",
+		"Mes plus sincères condoléances pour la perte de <@" + user.ID + ">.",
+		"Que Dieu bénisse <@" + user.ID + "> en ce moment de tristesse.",
+		"Je suis vraiment attristée d'apprendre la mort de <@" + user.ID + ">.",
+		"Puisse <@" + user.ID + "> reposer en paix.",
+		"C'est avec une grande tristesse que j'ai appris le décès de <@" + user.ID + ">.",
 
 		// Community
-		"Aurevoir, <@" + userID + ">. Reviens-nous vite!",
-		"<@" + userID + "> nous a quitté. Souhaiton-lui le meilleur!",
-		"<@" + userID + "> nous a quitté. Elle va nous manquer.",
-		"Adieu, <@" + userID + ">! Vole vers d'autres cieux!",
-		"<@" + userID + "> a été transféré vers un autre QG.",
-		"Nous n'oublierons pas le sacrifice de <@" + userID + ">!",
-		"Nous avons perdu <@" + userID + ">, mais nous restons forts.",
+		"Aurevoir, <@" + user.ID + ">. Reviens-nous vite!",
+		"<@" + user.ID + "> nous a quitté. Souhaiton-lui le meilleur!",
+		"<@" + user.ID + "> nous a quitté. Elle va nous manquer.",
+		"Adieu, <@" + user.ID + ">! Vole vers d'autres cieux!",
+		"<@" + user.ID + "> a été transféré vers un autre QG.",
+		"Nous n'oublierons pas le sacrifice de <@" + user.ID + ">!",
+		"Nous avons perdu <@" + user.ID + ">, mais nous restons forts.",
 
 		// Legendary
-		"C'est en ce jour funeste que <@" + userID + "> nous a quitté. Puisse son âme rejoindre le cristal et son héritage mon porte-maanas.",
+		"C'est en ce jour funeste que <@" + user.ID + "> nous a quitté. Puisse son âme rejoindre le cristal et son héritage mon porte-maanas.",
 	}
 
 	// Random
@@ -163,23 +163,23 @@ func getPublicByeMessage(userID string) string {
 	return byeList[rand.Intn(len(byeList))]
 }
 
-func getByeBotMessage(userID string) string {
+func getByeBotMessage(user *discordgo.User) string {
 
 	// Bye Messages
 	byeBotList := [...]string{
 
 		// Messages
-		"Bon débarras, <@" + userID + ">.",
-		"Bien! Personne ne va s'ennuyer de <@" + userID + ">.",
-		"De toute façon, <@" + userID + "> n'avait aucun lien avec Eldarya.",
-		"<@" + userID + "> ne nous manquera pas.",
-		"Ha! <@" + userID + "> est parti. Ça fait plus de popcorn pour moi!",
+		"Bon débarras, <@" + user.ID + ">.",
+		"Bien! Personne ne va s'ennuyer de <@" + user.ID + ">.",
+		"De toute façon, <@" + user.ID + "> n'avait aucun lien avec Eldarya.",
+		"<@" + user.ID + "> ne nous manquera pas.",
+		"Ha! <@" + user.ID + "> est parti. Ça fait plus de popcorn pour moi!",
 
 		// Community
-		"Nous sommes enfin débarrassés de <@" + userID + ">!",
-		"Oh, <@" + userID + "> est mort. Mais quel dommage.",
-		"Super! <@" + userID + "> a fiché le camp!",
-		"Ah? <@" + userID + "> était là?",
+		"Nous sommes enfin débarrassés de <@" + user.ID + ">!",
+		"Oh, <@" + user.ID + "> est mort. Mais quel dommage.",
+		"Super! <@" + user.ID + "> a fiché le camp!",
+		"Ah? <@" + user.ID + "> était là?",
 	}
 
 	// Random
