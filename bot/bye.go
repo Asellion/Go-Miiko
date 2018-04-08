@@ -1,26 +1,52 @@
 package bot
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
-	/*
-		// Get guild
-		guild, err := s.State.Guild(m.GuildID)
+func waitComeBack(s *discordgo.Session, g *discordgo.Guild, m *discordgo.Member) {
+
+	// Get welcome channel
+	var cid string
+	err := DB.QueryRow("select `welcome` from `servers` where `server` = ?", g.ID).Scan(&cid)
+	if err != nil {
+		fmt.Println("Couldn't select the welcome channel of", g.Name, ".")
+		return
+	}
+
+	// Make sure the channel exists
+	channel, err := s.Channel(cid)
+	if err != nil {
+		fmt.Println("Couldn't get the channel structure of a welcome channel.")
+		fmt.Println("Guild : " + g.Name)
+		fmt.Println("ChannelID : " + cid)
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Bot?
+	if m.User.Bot {
+
+		// Bye bot!
+		s.ChannelTyping(channel.ID)
+		_, err = s.ChannelMessageSend(channel.ID, getByeBotMessage(m.User.ID))
 		if err != nil {
-			fmt.Println("Couldn't get " + m.User.Username + "'s guild ID.")
+			fmt.Println("Couldn't say bye to " + m.User.Username + "!")
 			fmt.Println(err.Error())
-			return
 		}
 
-		// Get channel
-		channel, exists := config.Database.WelcomeChannels[guild.ID]
-		if !exists {
-			return
+	} else {
+
+		// Announce departure
+		err = s.ChannelTyping(channel.ID)
+		_, err = s.ChannelMessageSend(channel.ID, getPublicByeMessage(m.User.ID))
+		if err != nil {
+			fmt.Println("Couldn't announce the departure of " + m.User.Username + ".")
+			fmt.Println(err.Error())
 		}
 
 		// Create an invite structure
@@ -29,51 +55,29 @@ func waitComeBack(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 
 		// Create an invite to WelcomeChannel
 		var invite *discordgo.Invite
-		invite, err = s.ChannelInviteCreate(channel, invStruct)
+		invite, err = s.ChannelInviteCreate(channel.ID, invStruct)
 		if err != nil {
-			fmt.Println("Couldn't create an invite in " + guild.Name + ".")
+			fmt.Println("Couldn't create an invite in " + g.Name + ".")
 			fmt.Println(err.Error())
 			return
 		}
 
-		// Bot?
-		if m.User.Bot {
-
-			// Bye bot!
-			s.ChannelTyping(channel)
-			_, err = s.ChannelMessageSend(channel, getByeBotMessage(m.User.ID))
-			if err != nil {
-				fmt.Println("Couldn't say bye to " + m.User.Username + "!")
-				fmt.Println(err.Error())
-			}
-
-		} else {
-
-			// Open channel
-			privateChannel, err := s.UserChannelCreate(m.User.ID)
-			if err != nil {
-				fmt.Println("Couldn't create a private channel with " + m.User.Username + ".")
-				fmt.Println(err.Error())
-				return
-			}
-
-			// Send message
-			s.ChannelTyping(privateChannel.ID)
-			_, err = s.ChannelMessageSend(privateChannel.ID, getPrivateByeMessage(invite.Code))
-			if err != nil {
-				fmt.Println("Couldn't say bye to " + m.User.Username + "!")
-				fmt.Println(err.Error())
-			}
-
-			// Announce departure
-			err = s.ChannelTyping(channel)
-			_, err = s.ChannelMessageSend(channel, getPublicByeMessage(m.User.ID))
-			if err != nil {
-				fmt.Println("Couldn't announce the departure of " + m.User.Username + ".")
-				fmt.Println(err.Error())
-			}
+		// Open channel
+		privateChannel, err := s.UserChannelCreate(m.User.ID)
+		if err != nil {
+			fmt.Println("Couldn't create a private channel with " + m.User.Username + ".")
+			fmt.Println(err.Error())
+			return
 		}
-	*/
+
+		// Send message
+		s.ChannelTyping(privateChannel.ID)
+		_, err = s.ChannelMessageSend(privateChannel.ID, getPrivateByeMessage(invite.Code))
+		if err != nil {
+			fmt.Println("Couldn't send a message to " + m.User.Username + "!")
+			fmt.Println(err.Error())
+		}
+	}
 }
 
 func getPrivateByeMessage(inviteCode string) string {
