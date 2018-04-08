@@ -10,7 +10,7 @@ import (
 )
 
 // Nani command
-func Nani(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Nani(s *discordgo.Session, m *discordgo.Message) bool {
 
 	// Check for "Omae Wa Mou Shindeiru"
 	if strings.Contains(strings.ToLower(m.Content), "omae wa mou shindeiru") {
@@ -20,8 +20,11 @@ func Nani(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if err != nil {
 			fmt.Println("Couldn't express my surprise. Sad :(")
 			fmt.Println(err.Error())
+			return false
 		}
 	}
+
+	return true
 }
 
 func getNaniMessage() string {

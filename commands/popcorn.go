@@ -12,7 +12,7 @@ import (
 )
 
 // Popcorn command
-func Popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Popcorn(s *discordgo.Session, c *discordgo.Channel, m *discordgo.Message) bool {
 
 	// Check for "pop-corn", "popcorn", "maïs soufflé", "maïs éclaté", "pop corn"
 	if strings.Contains(strings.ToLower(m.Content), "popcorn") || strings.Contains(strings.ToLower(m.Content), "pop-corn") || strings.Contains(strings.ToLower(m.Content), "maïs soufflé") || strings.Contains(strings.ToLower(m.Content), "maïs éclaté") || strings.Contains(strings.ToLower(m.Content), "pop corn") {
@@ -32,9 +32,14 @@ func Popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 				fmt.Println("Author : " + m.Author.Username)
 				fmt.Println("Message : " + m.Content)
 				fmt.Println(err.Error())
+				return false
 			}
+
+			return true
 		}
 	}
+
+	return false
 }
 
 func getPopcornMessage() string {

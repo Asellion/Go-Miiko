@@ -10,11 +10,11 @@ import (
 )
 
 // PlaceInAGuard gives members a role.
-func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, u *discordgo.Member, m *discordgo.Message) {
+func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, u *discordgo.Member, m *discordgo.Message) bool {
 
 	// If Author has no role
-	if len(u.Roles) != 0 {
-		return
+	if len(u.Roles) != 0 || m.Author.Bot {
+		return false
 	}
 
 	// Get mentionned roles
@@ -26,10 +26,10 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 		guard = guards[0]
 	} else if len(guards) != 0 {
 		// Sorry, I didn't understand.
-		return
+		return false
 	} else {
 		// Why are you ignoring me?
-		return
+		return false
 	}
 
 	// Typing!
@@ -45,10 +45,9 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 	if role == nil {
 		fmt.Println("Strangely, I could not identify this role.")
 		fmt.Println("Guard :", guard)
-		return
+		return false
 	}
 
-	// Light
 	if guard == "Étincelante" {
 		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde <@&"+role.ID+">, envoie un message à <@"+g.OwnerID+"> sur Eldarya pour annoncer ta présence. En attendant, dans quelle garde est ton personnage sur Eldarya?")
 		if err != nil {
@@ -56,11 +55,7 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println("Channel : " + c.Name)
 			fmt.Println(err.Error())
 		}
-		return
-	}
-
-	// Guard
-	if guard == "Obsidienne" || guard == "Absynthe" || guard == "Ombre" {
+	} else if guard == "Obsidienne" || guard == "Absynthe" || guard == "Ombre" {
 
 		// Add role
 		err := s.GuildMemberRoleAdd(g.ID, u.User.ID, role.ID)
@@ -70,7 +65,7 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println("Role : " + role.ID)
 			fmt.Println("Member : " + u.User.Username)
 			fmt.Println(err.Error())
-			return
+			return false
 		}
 
 		// Announce
@@ -81,11 +76,7 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println(err.Error())
 		}
 
-		return
-	}
-
-	// Eel
-	if guard == "Eel" {
+	} else if guard == "Eel" {
 
 		// Add role
 		err := s.GuildMemberRoleAdd(g.ID, u.User.ID, role.ID)
@@ -94,7 +85,7 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println("Guild : " + g.Name)
 			fmt.Println("Member : " + m.Author.Username)
 			fmt.Println(err.Error())
-			return
+			return false
 		}
 
 		// Announce
@@ -105,11 +96,7 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println(err.Error())
 		}
 
-		return
-	}
-
-	// None
-	if guard == "PNJ" {
+	} else if guard == "PNJ" {
 
 		// Add role
 		err := s.GuildMemberRoleAdd(g.ID, u.User.ID, role.ID)
@@ -118,7 +105,7 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println("Guild : " + g.Name)
 			fmt.Println("Member : " + m.Author.Username)
 			fmt.Println(err.Error())
-			return
+			return false
 		}
 
 		// Announce
@@ -128,9 +115,9 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println("Channel : " + c.Name)
 			fmt.Println(err.Error())
 		}
-
-		return
 	}
+
+	return true
 }
 
 func getMentionnedGuard(m *discordgo.Message) []string {
