@@ -202,8 +202,38 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
+	// Get channel structure
+	channel, err := s.Channel(m.ChannelID)
+	if err != nil {
+		fmt.Println("Couldn't get the channel structure of a MessageReactionAdd!")
+		fmt.Println("m.ChannelID : " + m.ChannelID)
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Get the message structure
+	message, err := s.ChannelMessage(m.ChannelID, m.MessageID)
+	if err != nil {
+		fmt.Println("Couldn't get the message structure of a MessageReactionAdd!")
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("MessageID : " + m.MessageID)
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Get the guild structure
+	guild, err := s.State.Guild(channel.GuildID)
+	if err != nil {
+		fmt.Println("Couldn't get the guild structure of a MessageReactionAdd!")
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + message.Author.Username)
+		fmt.Println("Message : " + message.Content)
+		fmt.Println(err.Error())
+		return
+	}
+
 	// Pin popular message
-	pin(s, m)
+	pin(s, guild, channel, message)
 }
 
 func leaveHandler(s *discordgo.Session, m *discordgo.GuildMemberRemove) {

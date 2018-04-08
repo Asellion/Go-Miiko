@@ -4,67 +4,29 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/NatoBoram/Go-Miiko/wheel"
 	"github.com/bwmarrin/discordgo"
 )
 
-func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
-
-	// Get channel structure
-	channel, err := s.Channel(m.ChannelID)
-	if err != nil {
-		fmt.Println("Couldn't get the channel structure of a MessageReactionAdd!")
-		fmt.Println("m.ChannelID : " + m.ChannelID)
-		fmt.Println(err.Error())
-		return
-	}
+func pin(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, m *discordgo.Message) {
 
 	// DM?
-	if channel.Type == discordgo.ChannelTypeDM {
+	if c.Type == discordgo.ChannelTypeDM {
 		return
 	}
-
-	// Get the message structure
-	message, err := s.ChannelMessage(m.ChannelID, m.MessageID)
-	if err != nil {
-		fmt.Println("Couldn't get the message structure of a MessageReactionAdd!")
-		fmt.Println("Channel : " + channel.Name)
-		fmt.Println("MessageID : " + m.MessageID)
-		fmt.Println(err.Error())
-		return
-	}
-
-	// Get the guild structure
-	guild, err := s.State.Guild(channel.GuildID)
-	if err != nil {
-		fmt.Println("Couldn't get the guild structure of a MessageReactionAdd!")
-		fmt.Println("Channel : " + channel.Name)
-		fmt.Println("Author : " + message.Author.Username)
-		fmt.Println("Message : " + message.Content)
-		fmt.Println(err.Error())
-		return
-	}
-
-	// Get phi
-	// phi := (1 + math.Sqrt(5)) / 2
 
 	// Get people online
 	var onlineCount int
-	var notOfflineCount int
-	for x := 0; x < len(guild.Presences); x++ {
-		if guild.Presences[x].Status == discordgo.StatusOnline {
+	for x := 0; x < len(g.Presences); x++ {
+		if g.Presences[x].Status == discordgo.StatusOnline {
 			onlineCount++
-		}
-		if guild.Presences[x].Status != discordgo.StatusOffline {
-			notOfflineCount++
 		}
 	}
 
 	// Get the reactions
 	var singleReactionCount int
-	var totalReactionsCount int
-	for x := 0; x < len(message.Reactions); x++ {
-		singleReactionCount = int(math.Max(float64(singleReactionCount), float64(message.Reactions[x].Count)))
-		totalReactionsCount += message.Reactions[x].Count
+	for x := 0; x < len(m.Reactions); x++ {
+		singleReactionCount = wheel.MinInt(singleReactionCount, m.Reactions[x].Count)
 	}
 
 	// Pins needs at least 3 reactions!
@@ -72,19 +34,44 @@ func pin(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 	// Get minimum for pin
 	minOnline := int(math.Max(absoluteMinimum, math.Ceil(math.Sqrt(float64(onlineCount)))))
-	// minTotal := int(math.Max(minOnline + 1, math.Ceil(math.Sqrt(float64(notOfflineCount)))))
 
-	// Count the reactions
+	// Check the reactions
 	if singleReactionCount >= minOnline {
-		// || totalReactionsCount >= minTotal
 
 		// Pin it!
-		err := s.ChannelMessagePin(m.ChannelID, m.MessageID)
+		err := s.ChannelMessagePin(c.ID, m.ID)
 		if err != nil {
 			fmt.Println("Couldn't pin a popular message!")
-			fmt.Println("Message : " + message.Content)
+			fmt.Println("Guild : " + g.Name)
+			fmt.Println("Channel : " + c.Name)
+			fmt.Println("Author : " + m.Author.Username)
+			fmt.Println("Message : " + m.Content)
 			fmt.Println(err.Error())
 			return
 		}
+
+		// Add it to database!
+		pindb(g, m)
+	}
+}
+
+// Add a single pin to the database.
+func pindb(g *discordgo.Guild, m *discordgo.Message) {
+
+	// Prepare
+	stmt, err := DB.Prepare("insert into `pins`(`server`, `member`, `message`) values(?, ?, ?)")
+	if err != nil {
+		fmt.Println("Couldn't prepare a pin.")
+		fmt.Println(err.Error())
+		return
+	}
+	defer stmt.Close()
+
+	// Execute
+	_, err = stmt.Exec(g.ID, m.Author.ID, m.ID)
+	if err != nil {
+		fmt.Println("Couldn't insert a pin.")
+		fmt.Println(err.Error())
+		return
 	}
 }
