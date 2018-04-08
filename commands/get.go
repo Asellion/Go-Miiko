@@ -13,14 +13,19 @@ func Get(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Chan
 	if len(ms) > 2 {
 		switch ms[2] {
 		case "welcome":
-			GetWelcomeChannelCommand(db, s, g, c)
+			// Get Welcome Channel
+			if len(ms) > 3 {
+				if ms[3] == "channel" {
+					GetWelcomeChannelCommand(db, s, g, c)
+				}
+			}
 			break
 		case "points":
+			// Get Points
 			GetPoints(s, g, c, m)
 			break
 		}
 	}
-
 }
 
 // GetWelcomeChannelCommand send the welcome channel to an user.
