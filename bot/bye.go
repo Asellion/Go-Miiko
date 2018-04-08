@@ -85,12 +85,13 @@ func waitComeBack(s *discordgo.Session, g *discordgo.Guild, m *discordgo.Member)
 func getPrivateByeMessage(inviteCode string) string {
 
 	// Bye Messages
-	var byeList []string
+	byeList := [...]string{
 
-	// Messages
-	byeList = append(byeList, "Oh, je suis triste de te voir partir! Si tu veux nous rejoindre à nouveau, j'ai créé une invitation pour toi : https://discord.gg/"+inviteCode)
-	byeList = append(byeList, "Au revoir! Voici une invitation si tu changes d'idée : https://discord.gg/"+inviteCode)
-	byeList = append(byeList, "Tu vas me manquer. Si tu veux me revoir, j'ai créé une invitation pour toi : https://discord.gg/"+inviteCode)
+		// Messages
+		"Oh, je suis triste de te voir partir! Si tu veux nous rejoindre à nouveau, j'ai créé une invitation pour toi : https://discord.gg/" + inviteCode,
+		"Au revoir! Voici une invitation au cas où tu changes d'idée : https://discord.gg/" + inviteCode,
+		"Tu vas me manquer. Si tu veux me revoir, j'ai créé une invitation pour toi : https://discord.gg/" + inviteCode,
+	}
 
 	// Random
 	seed := time.Now().UnixNano()
@@ -104,53 +105,54 @@ func getPrivateByeMessage(inviteCode string) string {
 func getPublicByeMessage(userID string) string {
 
 	// Bye Messages
-	var byeList []string
+	byeList := [...]string{
 
-	// Messages
-	byeList = append(byeList, "J'ai le regret d'annoncer le départ de <@"+userID+">.")
-	byeList = append(byeList, "C'est avec émotion que j'annonce le départ de <@"+userID+">.")
-	byeList = append(byeList, "L'Oracle a emporté <@"+userID+"> avec elle.")
-	byeList = append(byeList, "<@"+userID+"> a quitté la garde.")
-	byeList = append(byeList, "Attends, <@"+userID+">, reviens!")
-	byeList = append(byeList, "<@"+userID+"> a pris son envol!")
-	byeList = append(byeList, "<@"+userID+"> vole de ses propres ailes.")
-	byeList = append(byeList, "<@"+userID+"> part à l'aventure!")
-	byeList = append(byeList, "L'aventure de <@"+userID+"> se termine ici.")
-	byeList = append(byeList, "La garde se souviendra de <@"+userID+">.")
-	byeList = append(byeList, "Il pleut lorsque je regarde vers <@"+userID+">.")
-	byeList = append(byeList, "Mon coeur se serre à l'annonce du départ de <@"+userID+">.")
-	byeList = append(byeList, "<@"+userID+"> a donné sa démission.")
-	byeList = append(byeList, "Que la force soit avec <@"+userID+">.")
+		// Messages
+		"J'ai le regret d'annoncer le départ de <@" + userID + ">.",
+		"C'est avec émotion que j'annonce le départ de <@" + userID + ">.",
+		"L'Oracle a emporté <@" + userID + "> avec elle.",
+		"<@" + userID + "> a quitté la garde.",
+		"Attends, <@" + userID + ">, reviens!",
+		"<@" + userID + "> a pris son envol!",
+		"<@" + userID + "> vole de ses propres ailes.",
+		"<@" + userID + "> part à l'aventure!",
+		"L'aventure de <@" + userID + "> se termine ici.",
+		"La garde se souviendra de <@" + userID + ">.",
+		"Il pleut lorsque je regarde vers <@" + userID + ">.",
+		"Mon coeur se serre à l'annonce du départ de <@" + userID + ">.",
+		"<@" + userID + "> a donné sa démission.",
+		"Que la force soit avec <@" + userID + ">.",
 
-	// Death
-	byeList = append(byeList, "Repose en paix, <@"+userID+">.")
-	byeList = append(byeList, "Pourquoi, <@"+userID+">, pourquoi?")
-	byeList = append(byeList, "<@"+userID+"> s'est fait dévorer par un Hydracarys.")
-	byeList = append(byeList, "<@"+userID+"> a marché dans une toile de Chead.")
-	byeList = append(byeList, "Un Black Gallytrot a démembré <@"+userID+">.")
-	byeList = append(byeList, "La foudre a frappé <@"+userID+">.")
-	byeList = append(byeList, "Je suis attristée d'apprendre la perte soudaine de <@"+userID+">.")
-	byeList = append(byeList, "Mon coeur est avec <@"+userID+"> en ce temps de tristesse.")
-	byeList = append(byeList, "Mes sincères condoléances pour la perte de <@"+userID+">.")
-	byeList = append(byeList, "Les mots ne peuvent exprimer combien je suis attristée d'apprendre la perte de <@"+userID+">.")
-	byeList = append(byeList, "Mes pensées et mes prières sont avec <@"+userID+"> pendant cette période tragique.")
-	byeList = append(byeList, "Mes plus sincères condoléances pour la perte de <@"+userID+">.")
-	byeList = append(byeList, "Que Dieu bénisse <@"+userID+"> en ce moment de tristesse.")
-	byeList = append(byeList, "Je suis vraiment attristée d'apprendre la mort de <@"+userID+">.")
-	byeList = append(byeList, "Puisse <@"+userID+"> reposer en paix.")
-	byeList = append(byeList, "C'est avec une grande tristesse que j'ai appris le décès de <@"+userID+">.")
+		// Death
+		"Repose en paix, <@" + userID + ">.",
+		"Pourquoi, <@" + userID + ">, pourquoi?",
+		"<@" + userID + "> s'est fait dévorer par un Hydracarys.",
+		"<@" + userID + "> a marché dans une toile de Chead.",
+		"Un Black Gallytrot a démembré <@" + userID + ">.",
+		"La foudre a frappé <@" + userID + ">.",
+		"Je suis attristée d'apprendre la perte soudaine de <@" + userID + ">.",
+		"Mon coeur est avec <@" + userID + "> en ce temps de tristesse.",
+		"Mes sincères condoléances pour la perte de <@" + userID + ">.",
+		"Les mots ne peuvent exprimer combien je suis attristée d'apprendre la perte de <@" + userID + ">.",
+		"Mes pensées et mes prières sont avec <@" + userID + "> pendant cette période tragique.",
+		"Mes plus sincères condoléances pour la perte de <@" + userID + ">.",
+		"Que Dieu bénisse <@" + userID + "> en ce moment de tristesse.",
+		"Je suis vraiment attristée d'apprendre la mort de <@" + userID + ">.",
+		"Puisse <@" + userID + "> reposer en paix.",
+		"C'est avec une grande tristesse que j'ai appris le décès de <@" + userID + ">.",
 
-	// Community
-	byeList = append(byeList, "Aurevoir, <@"+userID+">. Reviens-nous vite!")
-	byeList = append(byeList, "<@"+userID+"> nous a quitté. Souhaiton-lui le meilleur!")
-	byeList = append(byeList, "<@"+userID+"> nous a quitté. Elle va nous manquer.")
-	byeList = append(byeList, "Adieu, <@"+userID+">! Vole vers d'autres cieux!")
-	byeList = append(byeList, "<@"+userID+"> a été transféré vers un autre QG.")
-	byeList = append(byeList, "Nous n'oublierons pas le sacrifice de <@"+userID+">!")
-	byeList = append(byeList, "Nous avons perdu <@"+userID+">, mais nous restons forts.")
+		// Community
+		"Aurevoir, <@" + userID + ">. Reviens-nous vite!",
+		"<@" + userID + "> nous a quitté. Souhaiton-lui le meilleur!",
+		"<@" + userID + "> nous a quitté. Elle va nous manquer.",
+		"Adieu, <@" + userID + ">! Vole vers d'autres cieux!",
+		"<@" + userID + "> a été transféré vers un autre QG.",
+		"Nous n'oublierons pas le sacrifice de <@" + userID + ">!",
+		"Nous avons perdu <@" + userID + ">, mais nous restons forts.",
 
-	// Legendary
-	byeList = append(byeList, "C'est en ce jour funeste que <@"+userID+"> nous a quitté. Puisse son âme rejoindre le cristal et son héritage mon porte-maanas.")
+		// Legendary
+		"C'est en ce jour funeste que <@" + userID + "> nous a quitté. Puisse son âme rejoindre le cristal et son héritage mon porte-maanas.",
+	}
 
 	// Random
 	seed := time.Now().UnixNano()
@@ -164,20 +166,21 @@ func getPublicByeMessage(userID string) string {
 func getByeBotMessage(userID string) string {
 
 	// Bye Messages
-	var byeBotList []string
+	byeBotList := [...]string{
 
-	// Messages
-	byeBotList = append(byeBotList, "Bon débarras, <@"+userID+">.")
-	byeBotList = append(byeBotList, "Bien! Personne ne va s'ennuyer de <@"+userID+">.")
-	byeBotList = append(byeBotList, "De toute façon, <@"+userID+"> n'avait aucun lien avec Eldarya.")
-	byeBotList = append(byeBotList, "<@"+userID+"> ne nous manquera pas.")
-	byeBotList = append(byeBotList, "Ha! <@"+userID+"> est parti. Ça fait plus de popcorn pour moi!")
+		// Messages
+		"Bon débarras, <@" + userID + ">.",
+		"Bien! Personne ne va s'ennuyer de <@" + userID + ">.",
+		"De toute façon, <@" + userID + "> n'avait aucun lien avec Eldarya.",
+		"<@" + userID + "> ne nous manquera pas.",
+		"Ha! <@" + userID + "> est parti. Ça fait plus de popcorn pour moi!",
 
-	// Community
-	byeBotList = append(byeBotList, "Nous sommes enfin débarrassés de <@"+userID+">!")
-	byeBotList = append(byeBotList, "Oh, <@"+userID+"> est mort. Mais quel dommage.")
-	byeBotList = append(byeBotList, "Super! <@"+userID+"> a fiché le camp!")
-	byeBotList = append(byeBotList, "Ah? <@"+userID+"> était là?")
+		// Community
+		"Nous sommes enfin débarrassés de <@" + userID + ">!",
+		"Oh, <@" + userID + "> est mort. Mais quel dommage.",
+		"Super! <@" + userID + "> a fiché le camp!",
+		"Ah? <@" + userID + "> était là?",
+	}
 
 	// Random
 	seed := time.Now().UnixNano()
