@@ -40,37 +40,38 @@ func Popcorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 func getPopcornMessage() string {
 
 	// Popcorn Messages
-	var popcornList []string
+	popcornList := [...]string{
 
-	// Exclamation
-	popcornList = append(popcornList, "Popcorn?")
-	popcornList = append(popcornList, "Popcorn!")
-	popcornList = append(popcornList, "Popcorn?!")
-	popcornList = append(popcornList, "Popcorn!?")
-	popcornList = append(popcornList, "**Popcorn?!**")
-	popcornList = append(popcornList, "**Popcorn!?**")
-	popcornList = append(popcornList, "Ah, popcorn!")
-	popcornList = append(popcornList, "Hmm, du popcorn...")
-	popcornList = append(popcornList, "Hmm, du *popcorn*...")
+		// Exclamation
+		"Popcorn?",
+		"Popcorn!",
+		"Popcorn?!",
+		"Popcorn!?",
+		"**Popcorn?!**",
+		"**Popcorn!?**",
+		"Ah, popcorn!",
+		"Hmm, du popcorn...",
+		"Hmm, du *popcorn*...",
 
-	// Question
-	popcornList = append(popcornList, "On parle de popcorn?")
-	popcornList = append(popcornList, "Quelqu'un a dit popcorn?")
-	popcornList = append(popcornList, "Quelqu'un a dit popcorn?!")
-	popcornList = append(popcornList, "Quelqu'un a dit **popcorn**?!")
-	popcornList = append(popcornList, "Quelqu'un a parlé de popcorn?")
-	popcornList = append(popcornList, "Quelqu'un a parlé de popcorn?!")
-	popcornList = append(popcornList, "Ai-je bien entendu popcorn?")
-	popcornList = append(popcornList, "Ai-je bien entendu popcorn?!")
-	popcornList = append(popcornList, "Ai-je bien entendu **popcorn**?!")
+		// Question
+		"On parle de popcorn?",
+		"Quelqu'un a dit popcorn?",
+		"Quelqu'un a dit popcorn?!",
+		"Quelqu'un a dit **popcorn**?!",
+		"Quelqu'un a parlé de popcorn?",
+		"Quelqu'un a parlé de popcorn?!",
+		"Ai-je bien entendu popcorn?",
+		"Ai-je bien entendu popcorn?!",
+		"Ai-je bien entendu **popcorn**?!",
 
-	// WTF Miiko
-	popcornList = append(popcornList, "Moi, j'aime le popcorn!")
-	popcornList = append(popcornList, "Le popcorn, c'est génial!")
+		// WTF Miiko
+		"Moi, j'aime le popcorn!",
+		"Le popcorn, c'est génial!",
 
-	// Uhh...
-	popcornList = append(popcornList, "Le popcorn, c'est bon et tout, mais il ne faut pas oublier les friandises. J'adore les friandises!")
-	popcornList = append(popcornList, "Imagine si... On mélangeait du popcorn... Avec des friandises!")
+		// Uhh...
+		"Le popcorn, c'est bon et tout, mais il ne faut pas oublier les friandises. J'adore les friandises!",
+		"Imagine si... On mélangeait du popcorn... Avec des friandises!",
+	}
 
 	// Seed
 	seed := time.Now().UnixNano()
