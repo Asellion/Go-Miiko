@@ -67,7 +67,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
-		fmt.Println("Couldn't handle the channel structure of a message.")
+		fmt.Println("Couldn't get a channel structure.")
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
@@ -77,7 +77,19 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Get guild structure
 	guild, err := s.State.Guild(channel.GuildID)
 	if err != nil {
-		fmt.Println("Couldn't handle the guild structure of a message.")
+		fmt.Println("Couldn't get a guild structure.")
+		fmt.Println("Channel : " + channel.Name)
+		fmt.Println("Author : " + m.Author.Username)
+		fmt.Println("Message : " + m.Content)
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Get guild member
+	member, err := s.GuildMember(channel.GuildID, m.Author.ID)
+	if err != nil {
+		fmt.Println("Couldn't get a member structure.")
+		fmt.Println("Guild : " + guild.Name)
 		fmt.Println("Channel : " + channel.Name)
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
@@ -146,7 +158,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// Place in a guard
-	placeInAGuard(s, m)
+	commands.PlaceInAGuard(s, guild, channel, member, m.Message)
 
 	// Mentionned someone?
 	if len(m.Mentions) > 0 {
@@ -253,10 +265,14 @@ func leaveHandler(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 
 func joinHandler(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
-	// Myself?
-	if m.User.ID != Me.ID {
-
-		// Ask for guard
-		askForGuard(s, m)
+	// Get guild
+	guild, err := s.State.Guild(m.GuildID)
+	if err != nil {
+		fmt.Println("Couldn't get the guild", m.User.Username, "just joined.")
+		fmt.Println(err.Error())
+		return
 	}
+
+	// Ask for guard
+	askForGuard(s, guild, m.Member)
 }
