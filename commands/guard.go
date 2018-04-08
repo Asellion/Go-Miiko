@@ -67,7 +67,7 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 		}
 
 		// Announce
-		_, err = s.ChannelMessageSend(m.ChannelID, getGuardMessage(u.User.ID, role))
+		_, err = s.ChannelMessageSend(m.ChannelID, getGuardMessage(u.User, role))
 		if err != nil {
 			fmt.Println("Couldn't announce new role.")
 			fmt.Println("Channel : " + c.Name)
@@ -202,34 +202,35 @@ func getRoleByName(s *discordgo.Session, g *discordgo.Guild, name string) *disco
 	return role
 }
 
-func getGuardMessage(userID string, role *discordgo.Role) string {
+func getGuardMessage(user *discordgo.User, role *discordgo.Role) string {
 
 	// Messages
-	var messageList []string
-	messageList = append(messageList, "Bienvenue à <@"+userID+"> dans la garde <@&"+role.ID+">!")
-	messageList = append(messageList, "Bienvenue dans la garde <@&"+role.ID+">, <@"+userID+">.")
-	messageList = append(messageList, "Bienvenue dans la garde <@&"+role.ID+">, <@"+userID+">. J'espère que tu ne t'attends pas à un matelas.")
-	messageList = append(messageList, "Bienvenue au sein la garde <@&"+role.ID+">, <@"+userID+">.")
-	messageList = append(messageList, "Bienvenue parmis les <@&"+role.ID+">, <@"+userID+">.")
-	messageList = append(messageList, "<@"+userID+"> est maintenant un membre de la garde <@&"+role.ID+">!")
-	messageList = append(messageList, "<@&"+role.ID+"> a l'honneur d'accueillir <@"+userID+">!")
-	messageList = append(messageList, "<@&"+role.ID+">! Faites de la place pour <@"+userID+">!")
-	messageList = append(messageList, "<@"+userID+"> fait maintenant partie de la garde <@&"+role.ID+">.")
-	messageList = append(messageList, "<@"+userID+"> est maintenant une <@&"+role.ID+">!")
-	messageList = append(messageList, "Souhaitez la bienvenue à notre nouvelle <@&"+role.ID+">, <@"+userID+">!")
-	messageList = append(messageList, "Bien! <@"+userID+"> a maintenant une place dans les cachots de la garde <@&"+role.ID+">.")
-	messageList = append(messageList, "<@"+userID+"> a rejoint la garde <@&"+role.ID+">.")
-	messageList = append(messageList, "Je savais que <@"+userID+"> était une <@&"+role.ID+">!")
-	messageList = append(messageList, "Ah, je savais que <@"+userID+"> était une <@&"+role.ID+">.")
-	messageList = append(messageList, "Je savais bien que <@"+userID+"> était une <@&"+role.ID+">!")
-	messageList = append(messageList, "Ah, je le savais! <@"+userID+"> est une <@&"+role.ID+">!")
-	messageList = append(messageList, "J'en étais sûre! <@"+userID+"> est une <@&"+role.ID+">!")
-	messageList = append(messageList, "<@"+userID+"> est dorénavant une <@&"+role.ID+">.")
-	messageList = append(messageList, "Accueillez notre nouvelle <@&"+role.ID+">, <@"+userID+">!")
-	messageList = append(messageList, "Je te souhaite un bon séjour parmis les <@&"+role.ID+">, <@"+userID+">.")
-	messageList = append(messageList, "<@"+userID+"> peut maintenant rejoindre les <@&"+role.ID+">.")
-	messageList = append(messageList, "Tu peux rejoindre les <@&"+role.ID+">, <@"+userID+">.")
-	messageList = append(messageList, "Que les <@&"+role.ID+"> soient avec <@"+userID+">.")
+	messageList := [...]string{
+		"Bienvenue à <@" + user.ID + "> dans la garde <@&" + role.ID + ">!",
+		"Bienvenue dans la garde <@&" + role.ID + ">, <@" + user.ID + ">.",
+		"Bienvenue dans la garde <@&" + role.ID + ">, <@" + user.ID + ">. J'espère que tu ne t'attends pas à un matelas.",
+		"Bienvenue au sein la garde <@&" + role.ID + ">, <@" + user.ID + ">.",
+		"Bienvenue parmis les <@&" + role.ID + ">, <@" + user.ID + ">.",
+		"<@" + user.ID + "> est maintenant un membre de la garde <@&" + role.ID + ">!",
+		"<@&" + role.ID + "> a l'honneur d'accueillir <@" + user.ID + ">!",
+		"<@&" + role.ID + ">! Faites de la place pour <@" + user.ID + ">!",
+		"<@" + user.ID + "> fait maintenant partie de la garde <@&" + role.ID + ">.",
+		"<@" + user.ID + "> est maintenant une <@&" + role.ID + ">!",
+		"Souhaitez la bienvenue à notre nouvelle <@&" + role.ID + ">, <@" + user.ID + ">!",
+		"Bien! <@" + user.ID + "> a maintenant une place dans les cachots de la garde <@&" + role.ID + ">.",
+		"<@" + user.ID + "> a rejoint la garde <@&" + role.ID + ">.",
+		"Je savais que <@" + user.ID + "> était une <@&" + role.ID + ">!",
+		"Ah, je savais que <@" + user.ID + "> était une <@&" + role.ID + ">.",
+		"Je savais bien que <@" + user.ID + "> était une <@&" + role.ID + ">!",
+		"Ah, je le savais! <@" + user.ID + "> est une <@&" + role.ID + ">!",
+		"J'en étais sûre! <@" + user.ID + "> est une <@&" + role.ID + ">!",
+		"<@" + user.ID + "> est dorénavant une <@&" + role.ID + ">.",
+		"Accueillez notre nouvelle <@&" + role.ID + ">, <@" + user.ID + ">!",
+		"Je te souhaite un bon séjour parmis les <@&" + role.ID + ">, <@" + user.ID + ">.",
+		"<@" + user.ID + "> peut maintenant rejoindre les <@&" + role.ID + ">.",
+		"Tu peux rejoindre les <@&" + role.ID + ">, <@" + user.ID + ">.",
+		"Que les <@&" + role.ID + "> soient avec <@" + user.ID + ">.",
+	}
 
 	// Seed
 	source := rand.NewSource(time.Now().UnixNano())
