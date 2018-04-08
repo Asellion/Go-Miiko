@@ -29,7 +29,7 @@ func waitComeBack(s *discordgo.Session, g *discordgo.Guild, m *discordgo.Member)
 	}
 
 	// Bot?
-	if m.User == Me {
+	if m.User.ID == Me.ID {
 		fmt.Println("Looks like I just left", g.Name+".")
 	} else if m.User.Bot {
 
