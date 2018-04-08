@@ -21,9 +21,7 @@ create table if not exists `servers` (
 create table if not exists `pins` (
 	`server` varchar(32) not null,
 	`message` varchar(32) primary key,
-	`member` varchar(32) not null,
-
-	constraint `fk_pins_servers` foreign key (`server`) REFERENCES servers (`server`)
+	`member` varchar(32) not null
 ) engine=InnoDB default charset=utf8;
 
 -- Views
