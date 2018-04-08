@@ -195,7 +195,7 @@ func getRoleByName(s *discordgo.Session, g *discordgo.Guild, name string) *disco
 	// Create the missing role
 	role, err := s.GuildRoleCreate(g.ID)
 	if err != nil {
-		fmt.Println("Couldn't create a role.")
+		fmt.Println("Couldn't create the role", name, "in", g.Name+".")
 		fmt.Println(err.Error())
 		return nil
 	}
