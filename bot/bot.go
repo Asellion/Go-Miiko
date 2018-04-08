@@ -45,7 +45,7 @@ func Start(db *sql.DB, session *discordgo.Session, master string) error {
 	// Hey, listen!
 	//session.AddHandler(messageHandler)
 	session.AddHandler(reactHandler)
-	//session.AddHandler(leaveHandler)
+	session.AddHandler(leaveHandler)
 	//session.AddHandler(joinHandler)
 
 	// Set Initial Values
@@ -118,11 +118,11 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				return
 			}
 
-			// Foward the message to BotMaster!
+			// Forward the message to BotMaster!
 			s.ChannelTyping(masterChannel.ID)
 			_, err = s.ChannelMessageSend(masterChannel.ID, "<@"+m.Author.ID+"> : "+m.Content)
 			if err != nil {
-				fmt.Println("Couldn't foward a message to " + user.Username + ".")
+				fmt.Println("Couldn't forward a message to " + user.Username + ".")
 				fmt.Println("Author : " + m.Author.Username)
 				fmt.Println("Message : " + m.Content)
 				fmt.Println(err.Error())
