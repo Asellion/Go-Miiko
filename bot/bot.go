@@ -239,8 +239,16 @@ func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 
 func leaveHandler(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 
+	// Get guild
+	guild, err := s.State.Guild(m.GuildID)
+	if err != nil {
+		fmt.Println("Couldn't get the guild of " + m.User.Username + "!")
+		fmt.Println(err.Error())
+		return
+	}
+
 	// Invite people who leave
-	waitComeBack(s, m)
+	waitComeBack(s, guild, m.Member)
 }
 
 func joinHandler(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
