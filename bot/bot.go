@@ -46,7 +46,7 @@ func Start(db *sql.DB, session *discordgo.Session, master string) error {
 	//session.AddHandler(messageHandler)
 	session.AddHandler(reactHandler)
 	session.AddHandler(leaveHandler)
-	//session.AddHandler(joinHandler)
+	session.AddHandler(joinHandler)
 
 	// Set Initial Values
 
