@@ -13,7 +13,7 @@ import (
 var (
 	database config.DBStruct
 	discord  config.DiscordStruct
-	db       *sql.DB
+	db       *sql.DB // http://go-database-sql.org/
 	session  *discordgo.Session
 )
 
