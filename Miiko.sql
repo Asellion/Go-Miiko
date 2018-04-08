@@ -14,7 +14,7 @@ drop table if exists `servers`;
 -- Servers
 create table if not exists `servers` (
 	`server` varchar(32) primary key,
-	`welcome` varchar(32) default null
+	`welcome` varchar(32) not null
 ) engine=InnoDB default charset=utf8;
 
 -- Pins
