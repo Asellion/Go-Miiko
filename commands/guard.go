@@ -18,13 +18,13 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 	}
 
 	// Get mentionned roles
-	gardes := getMentionnedGuard(m)
+	guards := getMentionnedGuard(m)
 
 	// Check if there's only one mentionned role
-	var garde string
-	if len(gardes) == 1 {
-		garde = gardes[0]
-	} else if len(gardes) != 0 {
+	var guard string
+	if len(guards) == 1 {
+		guard = guards[0]
+	} else if len(guards) != 0 {
 		// Sorry, I didn't understand.
 		return
 	} else {
@@ -40,10 +40,16 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 		fmt.Println(err.Error())
 	}
 
-	// Announce
-	role := getRoleByName(s, g, garde)
+	// Get role by name
+	role := getRoleByName(s, g, guard)
+	if role == nil {
+		fmt.Println("Strangely, I could not identify this role.")
+		fmt.Println("Guard :", guard)
+		return
+	}
 
-	if garde == "Étincelante" {
+	// Light
+	if guard == "Étincelante" {
 		_, err := s.ChannelMessageSend(m.ChannelID, "Si tu fais partie de la Garde <@&"+role.ID+">, envoie un message à <@"+g.OwnerID+"> sur Eldarya pour annoncer ta présence. En attendant, dans quelle garde est ton personnage sur Eldarya?")
 		if err != nil {
 			fmt.Println("Couldn't send message for special role.")
@@ -53,7 +59,8 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 		return
 	}
 
-	if garde == "Obsidienne" || garde == "Absynthe" || garde == "Ombre" {
+	// Guard
+	if guard == "Obsidienne" || guard == "Absynthe" || guard == "Ombre" {
 
 		// Add role
 		err := s.GuildMemberRoleAdd(g.ID, u.User.ID, role.ID)
@@ -77,7 +84,8 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 		return
 	}
 
-	if garde == "Eel" {
+	// Eel
+	if guard == "Eel" {
 
 		// Add role
 		err := s.GuildMemberRoleAdd(g.ID, u.User.ID, role.ID)
@@ -100,7 +108,8 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 		return
 	}
 
-	if garde == "PNJ" {
+	// None
+	if guard == "PNJ" {
 
 		// Add role
 		err := s.GuildMemberRoleAdd(g.ID, u.User.ID, role.ID)
