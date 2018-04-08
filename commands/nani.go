@@ -18,7 +18,7 @@ func Nani(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// Nani?!
 		_, err := s.ChannelMessageSend(m.ChannelID, getNaniMessage())
 		if err != nil {
-			fmt.Println("Couldn't express my surprize. Sad :(")
+			fmt.Println("Couldn't express my surprise. Sad :(")
 			fmt.Println(err.Error())
 		}
 	}

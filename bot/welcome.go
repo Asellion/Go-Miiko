@@ -312,7 +312,7 @@ func getRoleByName(s *discordgo.Session, guildID string, name string) string {
 		fmt.Println(err.Error())
 	} else {
 
-		// Get the first occurence
+		// Get the first occurrence
 		for x := 0; x < len(guildRoles); x++ {
 			if guildRoles[x].Name == name {
 				return guildRoles[x].ID
