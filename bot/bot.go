@@ -141,7 +141,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if len(command) > 1 {
 				switch command[1] {
 				case "prune":
-					commands.Prune(s, m)
+					commands.Prune(s, guild, channel, m.Message, command)
 					break
 				case "get":
 					commands.Get()
