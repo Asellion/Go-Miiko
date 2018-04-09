@@ -58,7 +58,7 @@ func Start(db *sql.DB, session *discordgo.Session, master string) error {
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Myself?
-	if m.Author.ID == Me.ID {
+	if m.Author.ID == Me.ID || m.Author.Discriminator == "0000" {
 		return
 	}
 
@@ -82,16 +82,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Println(err.Error())
 		return
 	}
-
-	fmt.Println("Avatar", m.Author.Avatar)
-	fmt.Println("Bot", m.Author.Bot)
-	fmt.Println("Discriminator", m.Author.Discriminator)
-	fmt.Println("Email", m.Author.Email)
-	fmt.Println("ID", m.Author.ID)
-	fmt.Println("MFAEnabled", m.Author.MFAEnabled)
-	fmt.Println("Token", m.Author.Token)
-	fmt.Println("Username", m.Author.Username)
-	fmt.Println("Verified", m.Author.Verified)
 
 	// Get guild member
 	member, err := s.GuildMember(channel.GuildID, m.Author.ID)
