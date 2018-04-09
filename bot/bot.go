@@ -83,6 +83,16 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	fmt.Println(m.Author.Avatar)
+	fmt.Println(m.Author.Bot)
+	fmt.Println(m.Author.Discriminator)
+	fmt.Println(m.Author.Email)
+	fmt.Println(m.Author.ID)
+	fmt.Println(m.Author.MFAEnabled)
+	fmt.Println(m.Author.Token)
+	fmt.Println(m.Author.Username)
+	fmt.Println(m.Author.Verified)
+
 	// Get guild member
 	member, err := s.GuildMember(channel.GuildID, m.Author.ID)
 	if err != nil {
