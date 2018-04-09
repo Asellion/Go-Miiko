@@ -22,9 +22,9 @@ func Nani(s *discordgo.Session, m *discordgo.Message) bool {
 			fmt.Println(err.Error())
 			return false
 		}
+		return true
 	}
-
-	return true
+	return false
 }
 
 func getNaniMessage() string {
