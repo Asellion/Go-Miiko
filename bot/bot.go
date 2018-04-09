@@ -43,7 +43,7 @@ func Start(db *sql.DB, session *discordgo.Session, master string) error {
 	Master = user
 
 	// Hey, listen!
-	//session.AddHandler(messageHandler)
+	session.AddHandler(messageHandler)
 	session.AddHandler(reactHandler)
 	session.AddHandler(leaveHandler)
 	session.AddHandler(joinHandler)
