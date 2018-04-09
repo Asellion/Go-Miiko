@@ -54,7 +54,7 @@ func GetWelcomeChannel(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *
 
 	// Does it exists?
 	var exists int
-	err := db.QueryRow("select count(`welcome`) from `servers` where `server` = ?;", g.ID).Scan(&exists)
+	err := db.QueryRow("select count(`channel`) from `welcome` where `channel` = ?;", g.ID).Scan(&exists)
 	if err != nil {
 		fmt.Println("Could not confirm the existence of a welcome channel.")
 		fmt.Println("Guild :", g.Name)
@@ -74,7 +74,7 @@ func GetWelcomeChannel(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *
 
 		// Get the welcome channel's ID
 		var welcome string
-		err = db.QueryRow("select `welcome` from `servers` where `server` = ?;", g.ID).Scan(&welcome)
+		err = db.QueryRow("select `channel` from `welcome` where `channel` = ?;", g.ID).Scan(&welcome)
 		if err != nil {
 			fmt.Println("Could not select a welcome channel.")
 			fmt.Println("Guild :", g.Name)
