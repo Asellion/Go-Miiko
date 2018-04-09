@@ -8,8 +8,22 @@ import (
 )
 
 // Set redirects the `set` coommand.
-func Set() {
+func Set(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, m *discordgo.Message, ms []string) {
 
+	if len(ms) > 2 {
+		switch ms[2] {
+		case "welcome":
+			// Get Welcome Channel
+			if len(ms) > 3 {
+				if ms[3] == "channel" {
+					if m.Author.ID == g.OwnerID {
+						SetWelcomeChannelCommand(db, s, g, c)
+					}
+				}
+			}
+			break
+		}
+	}
 }
 
 // SetWelcomeChannelCommand sets the welcome channel and sends feedback to the user.
@@ -36,7 +50,7 @@ func SetWelcomeChannelCommand(db *sql.DB, s *discordgo.Session, g *discordgo.Gui
 func SetWelcomeChannel(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel) error {
 
 	var exists int
-	err := db.QueryRow("select count(`welcome`) from `servers` where `server` = ?;", g.ID).Scan(&exists)
+	err := db.QueryRow("select count(`channel`) from `welcome` where `channel` = ?;", g.ID).Scan(&exists)
 	if err != nil {
 		fmt.Println("Could not confirm the existence of a welcome channel.")
 		fmt.Println("Guild :", g.Name)
@@ -46,7 +60,7 @@ func SetWelcomeChannel(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *
 	} else if exists == 1 {
 
 		// Prepare
-		stmt, err := db.Prepare("update `servers` set `welcome` = ? where `server` = ?;")
+		stmt, err := db.Prepare("update `welcome` set `channel` = ? where `channel` = ?;")
 		if err != nil {
 			fmt.Println("Could not prepare to update a welcome channel.")
 			fmt.Println("Guild :", g.Name)
@@ -67,7 +81,7 @@ func SetWelcomeChannel(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *
 	} else if exists == 0 {
 
 		// Prepare
-		stmt, err := db.Prepare("insert into `servers`(`server`, `welcome`) values(?, ?);")
+		stmt, err := db.Prepare("insert into `welcome`(`channel`, `channel`) values(?, ?);")
 		if err != nil {
 			fmt.Println("Could not prepare to insert a welcome channel.")
 			fmt.Println("Guild :", g.Name)
