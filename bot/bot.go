@@ -147,7 +147,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 					commands.Get(DB, s, guild, channel, m.Message, command)
 					break
 				case "set":
-					commands.Set()
+					commands.Set(DB, s, guild, channel, m.Message, command)
 					break
 				}
 			}
