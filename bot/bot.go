@@ -57,10 +57,13 @@ func Start(db *sql.DB, session *discordgo.Session, master string) error {
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-	// Myself?
+	// Myself? Super User?
 	if m.Author.ID == Me.ID || m.Author.Discriminator == "0000" {
 		return
 	}
+
+	// Functions 2.0
+	done := false
 
 	// Get channel structure
 	channel, err := s.State.Channel(m.ChannelID)
@@ -69,6 +72,12 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Println("Author : " + m.Author.Username)
 		fmt.Println("Message : " + m.Content)
 		fmt.Println(err.Error())
+		return
+	}
+
+	// Forward to Master.
+	done = forward(s, channel, m.Message)
+	if done {
 		return
 	}
 
@@ -101,9 +110,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	// Functions 2.0
-	done := false
-
 	// Guard
 	done = commands.PlaceInAGuard(s, guild, channel, member, m.Message)
 	if done {
@@ -118,12 +124,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Popcorn!
 	done = commands.Popcorn(s, channel, m.Message)
-	if done {
-		return
-	}
-
-	// Forward to Master.
-	done = forward(s, channel, m.Message)
 	if done {
 		return
 	}
