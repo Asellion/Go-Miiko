@@ -59,7 +59,7 @@ func pin(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, m *disc
 func pindb(g *discordgo.Guild, m *discordgo.Message) {
 
 	// Prepare
-	stmt, err := DB.Prepare("insert into `pins`(`channel`, `member`, `message`) values(?, ?, ?)")
+	stmt, err := DB.Prepare("insert into `pins`(`server`, `member`, `message`) values(?, ?, ?)")
 	if err != nil {
 		fmt.Println("Couldn't prepare a pin.")
 		fmt.Println(err.Error())
