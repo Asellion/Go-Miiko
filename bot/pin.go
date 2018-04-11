@@ -26,7 +26,7 @@ func pin(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, m *disc
 	// Get the reactions
 	var singleReactionCount int
 	for x := 0; x < len(m.Reactions); x++ {
-		singleReactionCount = wheel.MinInt(singleReactionCount, m.Reactions[x].Count)
+		singleReactionCount = wheel.MaxInt(singleReactionCount, m.Reactions[x].Count)
 	}
 
 	// Pins needs at least 3 reactions!
