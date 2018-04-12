@@ -48,6 +48,9 @@ func Start(db *sql.DB, session *discordgo.Session, master string) error {
 	session.AddHandler(leaveHandler)
 	session.AddHandler(joinHandler)
 
+	// Refresh
+	go refresh(db, session)
+
 	// It's alive!
 	fmt.Println("Hi, master " + Master.Username + ". I am " + Me.Username + ", and everything's all right!")
 
