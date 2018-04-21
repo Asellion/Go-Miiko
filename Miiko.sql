@@ -25,12 +25,15 @@ create table if not exists `pins` (
 ) engine=InnoDB default charset=utf8;
 
 -- Views
+-- drop view `love`;
+-- drop view `pins-count`;
 
 -- Pins Count
 create view `pins-count` as
 select `server`, `member`, count(`message`) as `count`
 from `pins`
 group by `server`, `member`
+order by `server`, `count` desc
 ;
 
 -- Love
