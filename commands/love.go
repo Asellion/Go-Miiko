@@ -12,6 +12,14 @@ import (
 // GetLoverCmd outputs the lover
 func GetLoverCmd(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, u *discordgo.User) {
 
+	// Owner only!
+	if u.ID != g.OwnerID {
+		return
+	}
+
+	// Inform the user that I'm typing
+	s.ChannelTyping(c.ID)
+
 	// Get lover
 	lover, err := GetLover(db, s, g)
 	if err != nil {
@@ -20,7 +28,6 @@ func GetLoverCmd(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discor
 	}
 
 	// Send response
-	s.ChannelTyping(c.ID)
 	_, err = s.ChannelMessageSend(c.ID, getLoverMessage(lover))
 	if err != nil {
 		fmt.Println("Couldn't reveal my lover.")
@@ -39,7 +46,7 @@ func GetLover(db *sql.DB, s *discordgo.Session, g *discordgo.Guild) (*discordgo.
 	)
 
 	// Select potential lovers
-	rows, err := db.Query("select `member`, `count` from `love` where `server` = ? order by `count` desc;", g.ID)
+	rows, err := db.Query("select `member`, `count` from `pins-count` where `server` = ? order by `count` desc;", g.ID)
 	if err != nil {
 		fmt.Println("Couldn't get my lovers from this guild.")
 		fmt.Println("Guild :", g.Name)
@@ -106,7 +113,9 @@ func getLoverMessage(u *discordgo.User) string {
 
 	// Messages
 	loveList := [...]string{
-		"<@" + u.ID + ">",
+		"Disons que je chéris particulièrement <@" + u.ID + ">.",
+		"Si j'avais à marier quelqu'un... Ce serait <@" + u.ID + ">!",
+		"Peut-être... <@" + u.ID + ">?",
 	}
 
 	// Seed
