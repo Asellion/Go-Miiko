@@ -56,6 +56,13 @@ func getLoveMessage(u *discordgo.User) string {
 	loveList := [...]string{
 		":heart:",
 		"\\*Frissonne*",
+		"Coucou <@" + u.ID + "> :3",
+		"<@" + u.ID + ">-senpai \\*-*",
+		"\\*-*",
+		"<@" + u.ID + ">... Tu veux qu'on fasse quelque chose ensemble?",
+		"Oh, <@" + u.ID + ">, est-ce que je te manque?",
+		"Oh, <@" + u.ID + ">, est-ce que tu penses à moi?",
+		"Tiens-moi la main, <@" + u.ID + ">",
 	}
 
 	// Seed
