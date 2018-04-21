@@ -15,7 +15,7 @@ func askForGuard(s *discordgo.Session, g *discordgo.Guild, m *discordgo.Member) 
 	var cid string
 	err := DB.QueryRow("select `channel` from `welcome` where `server` = ?", g.ID).Scan(&cid)
 	if err != nil {
-		fmt.Println("Couldn't select the welcome channel of", m.User.Username+".")
+		fmt.Println("Couldn't select the welcome channel of", g.Name+".")
 		return
 	}
 
