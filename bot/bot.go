@@ -147,7 +147,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 					commands.Prune(s, guild, channel, m.Message)
 					return
 				case "get":
-					commands.Get(DB, s, guild, channel, m.Message, command)
+					commands.Get(Master, DB, s, guild, channel, m.Message, command)
 					return
 				case "set":
 					commands.Set(DB, s, guild, channel, m.Message, command)
