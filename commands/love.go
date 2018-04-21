@@ -14,7 +14,7 @@ func GetLoverCmd(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discor
 
 	// Owner only!
 	if u.ID != g.OwnerID {
-		return
+		// return // Comment this to authorize everyone
 	}
 
 	// Inform the user that I'm typing
