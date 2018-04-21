@@ -24,6 +24,10 @@ func Get(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Chan
 			// Get Points
 			GetPoints(s, g, c, m)
 			break
+		case "lover":
+			// Get Lover
+			GetLoverCmd(db, s, g, c, m.Author)
+			break
 		}
 	}
 }
