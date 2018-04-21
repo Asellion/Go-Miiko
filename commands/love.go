@@ -65,16 +65,8 @@ func GetLover(db *sql.DB, s *discordgo.Session, g *discordgo.Guild) (*discordgo.
 			continue
 		}
 
-		// User
-		user, err := s.User(userID)
-		if err != nil {
-			fmt.Println("Couldn't get a potential lover's user.")
-			fmt.Println("Guild :", g.Name)
-			continue
-		}
-
 		// Member
-		member, err := s.GuildMember(g.ID, user.ID)
+		member, err := s.GuildMember(g.ID, userID)
 		if err != nil {
 			fmt.Println("Couldn't get a potential lover's member.")
 			fmt.Println("Guild :", g.Name)
@@ -82,13 +74,13 @@ func GetLover(db *sql.DB, s *discordgo.Session, g *discordgo.Guild) (*discordgo.
 		}
 
 		// Owner
-		if g.OwnerID == user.ID {
+		if g.OwnerID == member.User.ID {
 			continue
 		}
 
 		// Roles
 		if len(member.Roles) == 1 {
-			return user, nil
+			return member.User, nil
 		}
 	}
 	err = rows.Err()
