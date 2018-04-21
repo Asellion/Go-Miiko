@@ -51,25 +51,73 @@ func love(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, u *dis
 
 func getLover(s *discordgo.Session, g *discordgo.Guild) (*discordgo.User, error) {
 
-	// User ID
-	var userID string
-	err := DB.QueryRow("select member from love where server = ?", g.ID).Scan(&userID)
+	var (
+		userID string
+		pins   int
+	)
+
+	// Select potential lovers
+	rows, err := DB.Query("select `member`, `count` from `love` where `server` = ? order by `count` desc;", g.ID)
 	if err != nil {
-		fmt.Println("Couldn't get my lover from this guild.")
+		fmt.Println("Couldn't get my lovers from this guild.")
+		fmt.Println("Guild :", g.Name)
+		return nil, err
+	}
+	defer rows.Close()
+
+	// For each rows
+	for rows.Next() {
+
+		// Scan it
+		err := rows.Scan(&userID, &pins)
+		if err != nil {
+			fmt.Println("Couldn't scan a potential lover.")
+			fmt.Println("Guild :", g.Name)
+			continue
+		}
+
+		// User
+		user, err := s.User(userID)
+		if err != nil {
+			fmt.Println("Couldn't get a potential lover's user.")
+			fmt.Println("Guild :", g.Name)
+			continue
+		}
+
+		// Member
+		member, err := s.GuildMember(g.ID, user.ID)
+		if err != nil {
+			fmt.Println("Couldn't get a potential lover's member.")
+			fmt.Println("Guild :", g.Name)
+			continue
+		}
+
+		// Owner
+		if g.OwnerID == user.ID {
+			continue
+		}
+
+		// Roles
+		if len(member.Roles) == 1 {
+			return user, nil
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		fmt.Println("Couldn't loop my lovers.")
 		fmt.Println("Guild :", g.Name)
 		return nil, err
 	}
 
-	// User
-	user, err := s.User(userID)
+	// Unreachable code.
+	user, err := s.User(g.OwnerID)
 	if err != nil {
-		fmt.Println("Couldn't get my dear user.")
+		fmt.Println("Couldn't love the owner.")
 		fmt.Println("Guild :", g.Name)
 		return nil, err
 	}
 
-	// Return
-	return user, nil
+	return user, err
 }
 
 func getLoveMessage(u *discordgo.User) string {
