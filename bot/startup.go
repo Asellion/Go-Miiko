@@ -29,6 +29,8 @@ func refresh(db *sql.DB, s *discordgo.Session) {
 			pins, err := s.ChannelMessagesPinned(channel.ID)
 			if err != nil {
 				fmt.Println("Couldn't get a channel's pins.")
+				fmt.Println("Guild :", guild.Name)
+				fmt.Println("Channel :", channel.Name)
 				fmt.Println(err.Error())
 				continue
 			}
