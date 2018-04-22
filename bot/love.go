@@ -30,7 +30,7 @@ func love(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, m *dis
 		random := rand.Float64()
 
 		// Rate Limit
-		if random < 1/(wheel.Phi()*10) {
+		if random < 1/(wheel.Phi()*100) {
 
 			// Member
 			member, err := s.GuildMember(g.ID, lover.ID)
@@ -80,7 +80,6 @@ func getLoveMessage(name string) string {
 		// Orders
 		"Tiens-moi la main, " + name + "",
 		"" + name + "! Regarde-moiii \\*-*",
-		"" + name + " : La perfection absolue.",
 		"Caresse-moi les oreilles, s'il te plait!",
 
 		// Questions
