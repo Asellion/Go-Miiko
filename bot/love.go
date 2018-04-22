@@ -82,7 +82,6 @@ func getLoveMessage(u *discordgo.User) string {
 		":heart:",
 		"\\*Frissonne*",
 		"\\*-*",
-		"\\*Gémis*",
 		"<@" + u.ID + ">-senpai \\*-*",
 
 		// Verbose
