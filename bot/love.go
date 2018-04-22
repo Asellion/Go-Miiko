@@ -87,7 +87,7 @@ func getLoveMessage(u *discordgo.User) string {
 		// Verbose
 		"J'ai trouvé un morceau de cristal pour toi, <@" + u.ID + "> :heart:",
 		"Cette voix est une musique à mes oreilles",
-		"J'aimerais pouvoir passer plus de temps avec toi, <@" + u.ID + ">-san...",
+		"J'aimerais pouvoir passer plus de temps avec toi, <@" + u.ID + ">...",
 		"Je fais juste passer pour dire à <@" + u.ID + "> que je l'aime!",
 		"J'adore quand tu parles... :3",
 		"J'adore entendre mon amour parler \\*-*",
