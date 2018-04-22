@@ -34,7 +34,7 @@ func GetLoverCmd(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discor
 			fmt.Println(err.Error())
 			return
 		}
-		mention = member.Nick
+		mention = "**" + member.Nick + "**"
 	}
 
 	// Send response
