@@ -158,7 +158,10 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// Love!
-	love(s, guild, channel, m.Author)
+	done = love(s, guild, channel, m.Message)
+	if done {
+		return
+	}
 }
 
 func reactHandler(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
