@@ -12,11 +12,6 @@ import (
 // GetLoverCmd outputs the lover
 func GetLoverCmd(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, u *discordgo.User) {
 
-	// Owner only!
-	if u.ID != g.OwnerID {
-		return // Comment this to authorize everyone
-	}
-
 	// Inform the user that I'm typing
 	s.ChannelTyping(c.ID)
 
@@ -27,8 +22,23 @@ func GetLoverCmd(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discor
 		return
 	}
 
+	var mention string
+	if u.ID == g.OwnerID {
+		mention = "<@" + lover.ID + ">"
+	} else {
+
+		// Don't mention because we don't want to spam the lover
+		member, err := s.GuildMember(g.ID, lover.ID)
+		if err != nil {
+			fmt.Println("Couldn't get the member I love.")
+			fmt.Println(err.Error())
+			return
+		}
+		mention = member.Nick
+	}
+
 	// Send response
-	_, err = s.ChannelMessageSend(c.ID, getLoverMessage(lover))
+	_, err = s.ChannelMessageSend(c.ID, getLoverMessage(mention))
 	if err != nil {
 		fmt.Println("Couldn't reveal my lover.")
 		fmt.Println("Guild :", g.Name)
@@ -101,46 +111,46 @@ func GetLover(db *sql.DB, s *discordgo.Session, g *discordgo.Guild) (*discordgo.
 	return user, err
 }
 
-func getLoverMessage(u *discordgo.User) string {
+func getLoverMessage(name string) string {
 
 	// Messages
 	loveList := [...]string{
 
 		// Verbose
-		"Je crois... Je crois que j'aime <@" + u.ID + ">.",
-		"Je crois... Je crois que j'ai un faible pour <@" + u.ID + ">.",
-		"Disons que je chéris particulièrement <@" + u.ID + ">.",
-		"Si j'avais à marier quelqu'un... Ce serait <@" + u.ID + ">!",
-		"Peut-être... <@" + u.ID + ">?",
-		"Je planifie mon mariage avec <@" + u.ID + ">!",
-		"J'avoue avoir un faible pour <@" + u.ID + ">.",
-		"Lance, c'est du passé. <@" + u.ID + ">, c'est mon futur!",
-		"Je l'admets... je rêve de <@" + u.ID + "> la nuit...",
-		"J'avoue que... je rêve de <@" + u.ID + "> la nuit.",
-		"<@" + u.ID + "> est le beurre sur mon popcorn!",
-		"*Si seulement <@" + u.ID + "> m'aimait autant que je l'aime...*",
-		"Je n'avouerai jamais que j'aime <@" + u.ID + ">!",
-		"Non! Vous ne saurez jamais que j'aime <@" + u.ID + ">!",
+		"Je crois... Je crois que j'aime " + name + ".",
+		"Je crois... Je crois que j'ai un faible pour " + name + ".",
+		"Disons que je chéris particulièrement " + name + ".",
+		"Si j'avais à marier quelqu'un... Ce serait " + name + "!",
+		"Peut-être... " + name + "?",
+		"Je planifie mon mariage avec " + name + "!",
+		"J'avoue avoir un faible pour " + name + ".",
+		"Lance, c'est du passé. " + name + ", c'est mon futur!",
+		"Je l'admets... je rêve de " + name + " la nuit...",
+		"J'avoue que... je rêve de " + name + " la nuit.",
+		"" + name + " est le beurre sur mon popcorn!",
+		"*Si seulement " + name + " m'aimait autant que je l'aime...*",
+		"Je n'avouerai jamais que j'aime " + name + "!",
+		"Non! Vous ne saurez jamais que j'aime " + name + "!",
 
 		// Tsundere
-		"C'est pas comme si jamais <@" + u.ID + "> ou quoi que ce soit...",
-		"<@" + u.ID + ">, mais... Ne te fais pas de fausses idées!",
+		"C'est pas comme si jamais " + name + " ou quoi que ce soit...",
+		"" + name + ", mais... Ne te fais pas de fausses idées!",
 
 		// Exclamations
-		"<@" + u.ID + ">, évidemment!",
-		"<@" + u.ID + ">, sans aucun doute!",
-		"Que... Quoi? Ce... Je... <@" + u.ID + ">!",
-		"<@" + u.ID + "> d'amour :heart:",
-		"JE N'AVOUERAI JAMAIS! ... <@" + u.ID + ">.",
+		"" + name + ", évidemment!",
+		"" + name + ", sans aucun doute!",
+		"Que... Quoi? Ce... Je... " + name + "!",
+		"" + name + " d'amour :heart:",
+		"JE N'AVOUERAI JAMAIS! ... " + name + ".",
 
 		// Straight answers
-		"<@" + u.ID + "> est l'amour de ma vie.",
-		"À part le popcorn? <@" + u.ID + ">.",
-		"Je suis amoureuse de <@" + u.ID + ">.",
+		"" + name + " est l'amour de ma vie.",
+		"À part le popcorn? " + name + ".",
+		"Je suis amoureuse de " + name + ".",
 
 		// Also fits in Bot
-		"<@" + u.ID + ">, je t'aime!",
-		"Aaah... <@" + u.ID + ">!",
+		"" + name + ", je t'aime!",
+		"Aaah... " + name + "!",
 	}
 
 	// Seed
