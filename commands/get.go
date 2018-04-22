@@ -8,7 +8,7 @@ import (
 )
 
 // Get redirects the `get` coommand.
-func Get(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, m *discordgo.Message, ms []string) {
+func Get(master *discordgo.User, db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channel, m *discordgo.Message, ms []string) {
 
 	if len(ms) > 2 {
 		switch ms[2] {
@@ -23,6 +23,10 @@ func Get(db *sql.DB, s *discordgo.Session, g *discordgo.Guild, c *discordgo.Chan
 		case "points":
 			// Get Points
 			GetPoints(s, g, c, m)
+			break
+		case "lover":
+			// Get Lover
+			GetLoverCmd(db, s, g, c, m.Author)
 			break
 		}
 	}

@@ -145,16 +145,22 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				switch command[1] {
 				case "prune":
 					commands.Prune(s, guild, channel, m.Message)
-					break
+					return
 				case "get":
-					commands.Get(DB, s, guild, channel, m.Message, command)
-					break
+					commands.Get(Master, DB, s, guild, channel, m.Message, command)
+					return
 				case "set":
 					commands.Set(DB, s, guild, channel, m.Message, command)
-					break
+					return
 				}
 			}
 		}
+	}
+
+	// Love!
+	done = love(s, guild, channel, m.Message)
+	if done {
+		return
 	}
 }
 
