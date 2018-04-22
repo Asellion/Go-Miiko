@@ -105,9 +105,42 @@ func getLoverMessage(u *discordgo.User) string {
 
 	// Messages
 	loveList := [...]string{
+
+		// Verbose
+		"Je crois... Je crois que j'aime <@" + u.ID + ">.",
+		"Je crois... Je crois que j'ai un faible pour <@" + u.ID + ">.",
 		"Disons que je chéris particulièrement <@" + u.ID + ">.",
 		"Si j'avais à marier quelqu'un... Ce serait <@" + u.ID + ">!",
 		"Peut-être... <@" + u.ID + ">?",
+		"Je planifie mon mariage avec <@" + u.ID + ">!",
+		"J'avoue avoir un faible pour <@" + u.ID + ">.",
+		"Lance, c'est du passé. <@" + u.ID + ">, c'est mon futur!",
+		"Je l'admets... je rêve de <@" + u.ID + "> la nuit...",
+		"J'avoue que... je rêve de <@" + u.ID + "> la nuit.",
+		"<@" + u.ID + "> est le beurre sur mon popcorn!",
+		"*Si seulement <@" + u.ID + "> m'aimait autant que je l'aime...*",
+		"Je n'avouerai jamais que j'aime <@" + u.ID + ">!",
+		"Non! Vous ne saurez jamais que j'aime <@" + u.ID + ">!",
+
+		// Tsundere
+		"C'est pas comme si jamais <@" + u.ID + "> ou quoi que ce soit...",
+		"<@" + u.ID + ">, mais... Ne te fais pas de fausses idées!",
+
+		// Exclamations
+		"<@" + u.ID + ">, évidemment!",
+		"<@" + u.ID + ">, sans aucun doute!",
+		"Que... Quoi? Ce... Je... <@" + u.ID + ">!",
+		"<@" + u.ID + "> d'amour :heart:",
+		"JE N'AVOUERAI JAMAIS! ... <@" + u.ID + ">.",
+
+		// Straight answers
+		"<@" + u.ID + "> est l'amour de ma vie.",
+		"À part le popcorn? <@" + u.ID + ">.",
+		"Je suis amoureuse de <@" + u.ID + ">.",
+
+		// Also fits in Bot
+		"<@" + u.ID + ">, je t'aime!",
+		"Aaah... <@" + u.ID + ">!",
 	}
 
 	// Seed
