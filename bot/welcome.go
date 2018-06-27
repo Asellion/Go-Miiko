@@ -100,7 +100,11 @@ func getWelcomeMessage(username string) string {
 		"Souhaitez tous la bienvenue à <@" + username + ">!",
 		"Une bonne main d'applaudissement pour <@" + username + ">!",
 	}
-
+	
+	presentingList :=[...]string{
+		"N'hésite pas à aller te présenter dans le chan #présentation si tu en as envie !"
+	}
+	
 	// What's your guard?
 	questionList := [...]string{
 		"Dans quelle garde es-tu?",
@@ -126,7 +130,7 @@ func getWelcomeMessage(username string) string {
 	rand := rand.New(source)
 
 	// Return
-	return welcomeList[rand.Intn(len(welcomeList))] + " " + questionList[rand.Intn(len(questionList))]
+	return welcomeList[rand.Intn(len(welcomeList))] + " " + presentingList[rand.Intn(len(presentingList))] + " "+ questionList[rand.Intn(len(questionList))]
 }
 
 func getWelcomeBotMessage(userID string) string {
