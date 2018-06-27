@@ -102,7 +102,7 @@ func getWelcomeMessage(username string) string {
 	}
 	
 	presentingList :=[...]string{
-		"N'hésite pas à aller te présenter dans le chan #présentation si tu en as envie !"
+		"N'hésite pas à aller te présenter dans le chan #présentation si tu en as envie !",
 	}
 	
 	// What's your guard?
