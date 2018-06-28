@@ -75,6 +75,15 @@ func PlaceInAGuard(s *discordgo.Session, g *discordgo.Guild, c *discordgo.Channe
 			fmt.Println("Channel : " + c.Name)
 			fmt.Println(err.Error())
 		}
+		
+		// Presenting
+		_, err = s.ChannelMessageSend(m.ChannelID, getPresentingMessage(u.User))
+		if err != nil {
+			fmt.Println("Couldn't announce presenting.")
+			fmt.Println("Channel : " + c.Name)
+			fmt.Println(err.Error())
+		}		
+		
 
 	} else if guard == "Eel" {
 
@@ -228,6 +237,22 @@ func getGuardMessage(user *discordgo.User, role *discordgo.Role) string {
 		"Que les <@&" + role.ID + "> soient avec <@" + user.ID + ">.",
 	}
 
+	// Seed
+	source := rand.NewSource(time.Now().UnixNano())
+	seed := rand.New(source)
+
+	// Return
+	return messageList[seed.Intn(len(messageList))]
+}
+
+func getPresentingMessage(user *discordgo.User) string {
+	
+	// Messages
+	messageList := [...]string{
+		"J'aimerai beaucoup apprendre à te connaitre <@&"+ user.ID +">, tu peux m'en dire plus sur toi dans #presentation si jamais tu as le temps !",
+		"<@&"+ user.ID +"> est si mystérieux ... Tu peux en dévoilé plus sur toi en #presentation si tu veux !",
+	}
+	
 	// Seed
 	source := rand.NewSource(time.Now().UnixNano())
 	seed := rand.New(source)
